@@ -1,411 +1,264 @@
-# ROOT QUEST — Examen de Servicios
+# Dragon Ball · Net Warriors
 
-Juego de repaso para el repositorio `juankafdez05/Examen-servicios1`.
+Juego personal no oficial para repasar el examen de Servicios de Red.
 
-## Inicio rápido
-
-1. Guarda el código del juego en `index.html`.
-2. Guarda este documento en `README.md`.
-3. Abre `index.html` en un navegador moderno.
-4. Entra en una sala y empieza por el siguiente terminal.
-
-No requiere instalación, dependencias, CDN, fuentes externas ni servidor
-para el uso local. No ejecuta comandos del sistema: todos los ejercicios
-son simulaciones educativas.
+Repositorio: `juankafdez05/Examen-servicios1`.
 
 ## Archivos
 
-    Examen-servicios1/
-    ├── index.html
-    └── README.md
+- `index.html`: juego completo, estilos, dibujos SVG, preguntas y guardado.
+- `README.md`: instrucciones y limitaciones.
 
-## Privacidad: importante
+## Uso
 
-El HTML no incluye autenticación ni control de acceso.
+Reemplazar completamente el `index.html` anterior por esta versión.
 
-- Usar el archivo localmente evita tener que publicar el juego.
-- Subirlo a un repositorio y publicarlo como web son acciones distintas.
-- No debe suponerse que una web es privada por el nombre del repositorio
-  o porque nadie conozca su dirección.
-- Una contraseña incluida en JavaScript no sería una protección real
-  del contenido descargado.
-- Para acceso exclusivamente personal en línea, el alojamiento debe
-  imponer una restricción de acceso real antes de servir el contenido.
+Puede abrirse como archivo local. No requiere instalación, bibliotecas,
+imágenes remotas, fuentes externas ni conexión para sus recursos.
 
-No se incluyen instrucciones para publicar una web abierta porque el
-requisito indicado es que solo el propietario pueda acceder.
+Después de actualizar una versión alojada, puede ser necesario recargar
+sin caché para que el navegador utilice el archivo nuevo.
 
-El código del juego no hace peticiones de red, no incorpora analítica
-y no utiliza servicios de terceros.
+## Importante sobre acceso privado
+
+El juego no incorpora autenticación.
+
+Publicar un HTML sin una restricción de acceso real no garantiza que
+solo su propietario pueda verlo. No se incluye una contraseña en
+JavaScript porque no protegería realmente el contenido descargado.
+
+Para uso estrictamente personal, puede ejecutarse localmente.
+
+## Temática
+
+Fan game educativo con:
+
+- Goku, Vegeta y Gohan seleccionables.
+- Nueve escenarios inspirados en Dragon Ball.
+- Dibujos SVG simplificados originales.
+- Ataques de ki y ataque especial.
+- Guardia.
+- Semillas senzu.
+- Transformaciones visuales.
+- Siete esferas y dos victorias finales.
+- Jefes por saga.
+
+No contiene imágenes, música ni logotipos oficiales descargados.
+No está afiliado a los titulares de Dragon Ball.
+
+Los nombres y escenarios se usan como ambientación.
+El contenido evaluado es administración de sistemas y servicios de red.
 
 ## Mecánicas
 
-### Nueve salas
+### Modalidad A: reconocimiento
 
-1. Bastión SSH
-2. Fortaleza sudo
-3. Archivo de Identidades
-4. Sala de Interfaces
-5. Laberinto NSS
-6. Frontera NAT
-7. Torre DHCP
-8. Motor Kea
-9. Sala del Reinicio
+Cada objetivo tiene una pregunta con tres opciones, mezcladas en cada
+intento. La corrección es automática.
 
-Cada sala contiene terminales y un jefe.
+### Modalidad B: explicación y aplicación
 
-### Dos modalidades por objetivo
+Hay que escribir una respuesta antes de revelar la solución.
 
-**A. Reconocimiento**
+Después se compara con tres criterios. La valoración es autoevaluada:
+el juego no contiene una IA que interprete la respuesta.
 
-Pregunta con tres opciones. El orden se mezcla en cada intento.
+Solo deben marcarse los criterios que la respuesta ya cumplía antes
+de ver la solución.
 
-**B. Explicación y aplicación**
+### Vida
 
-Caso abierto que exige redactar una respuesta antes de mostrar la
-solución. Después se compara con tres criterios.
+- Se empieza con cinco vidas.
+- Un fallo resta una vida si no hay guardia.
+- Un fallo vuelve a dejar pendiente esa modalidad.
+- Al llegar a cero se vuelve al refugio.
+- Se conserva el resto del progreso.
+- Descansar restaura vida.
+- Una senzu restaura hasta dos vidas.
 
-La corrección abierta es AUTOEVALUADA. No hay una IA analizando la
-respuesta ni un corrector semántico disfrazado de evaluación automática.
+### Ki y XP
 
-Marcar criterios que no estaban en la respuesta elimina el valor del
-repaso. Sé exigente: el objetivo es aprender, no ganar puntos.
+- Primer acierto sin ayuda en una modalidad pendiente: 10 XP.
+- Repetición correcta sin ayuda: 3 XP.
+- Respuesta correcta con ayuda: 2 XP, sin acreditar.
+- Acierto sin ayuda: 20 ki, hasta un máximo de 100.
+- Acierto sin ayuda con 100 ki: ataque especial, consume el ki y añade 5 XP.
+- Guardia: cuesta 30 ki y evita un daño, no un error.
+- Primera victoria contra un jefe: 50 XP, una senzu y una vida.
 
-### Vida y experiencia
+La apariencia cambia a partir de 200 XP y de nuevo a partir de 650 XP.
 
-- Empiezas con cinco vidas.
-- Un fallo resta una vida.
-- El error deja pendiente la modalidad correspondiente.
-- Los fallos se registran en el cuaderno.
-- Con cero vidas vuelves al refugio.
-- Conservas XP, jefes vencidos y el resto del aprendizaje.
-- Puedes descansar sin penalización de tiempo.
-- Una poción restaura hasta dos vidas.
+### Ayudas
 
-Puntuación:
+Una pista marca el intento como asistido.
 
-- Primera superación sin pista de una modalidad pendiente: 10 XP.
-- Repetición correcta ya acreditada: 3 XP.
-- Respuesta correcta con pista: 3 XP, sin acreditar la modalidad.
-- Primera victoria contra un jefe: 50 XP, una poción y una vida.
+Abrir el cuaderno durante un reto sin resolver también lo marca como
+asistido. Ese intento no acredita la modalidad.
 
 ### Jefes
 
-Se desbloquean al superar las dos modalidades de todos los terminales
-de su sala.
+Para desbloquear un jefe se deben superar las dos modalidades de todos
+los objetivos de su sala.
 
-Cada jefe selecciona tres retos abiertos de esa sala.
-Hay que superar los tres sin pistas.
+El jefe selecciona tres retos abiertos. Deben superarse los tres sin
+ayuda.
 
-Los jefes no son una prueba independiente de corrección automática:
-sus respuestas abiertas también son autoevaluadas.
+Las victorias se conservan como logros históricos, aunque después se
+falle una modalidad durante un repaso.
 
-### Animaciones
+### Torneo mixto
 
-- Ataque del administrador.
-- Impacto sobre el enemigo.
-- Retroceso y daño al fallar.
-- Pérdida de vida visible.
-- Movimiento del personaje según el avance en la sala.
-- Confeti al completar hitos.
-- Sonidos opcionales.
+18 retos: dos por sala, combinando reconocimiento y explicación.
 
-Se respeta `prefers-reduced-motion`.
+El torneo es un repaso parcial, no sustituye el recorrido de los 52
+objetivos.
 
-## Modos adicionales
+## Cobertura académica
 
-### Repaso de errores
+52 objetivos y 104 ejercicios base:
 
-Selecciona hasta diez objetivos con errores y modalidades pendientes.
-Prioriza los que acumulan más fallos.
-
-### Simulacro mixto
-
-Selecciona dos objetivos de cada sala: 18 retos en total.
-Combina reconocimiento y explicación.
-
-No reemplaza el recorrido completo de los 52 objetivos.
-
-### Cuaderno
-
-Permite revisar soluciones, fuentes, rúbricas y lagunas documentales.
-Leer una solución no acredita una modalidad.
-
-### Matriz de cobertura
-
-Muestra los 52 objetivos con:
-
-- ID.
-- Nombre.
-- Estado de reconocimiento.
-- Estado de explicación.
-- Variante práctica.
-- Fuente.
-- Laguna documental, si existe.
-
-Se puede buscar y exportar como Markdown.
-
-## Fuentes y límites
-
-El contenido académico procede de:
-
-1. Configuración inicial de un servidor Linux.
-2. Protocolo DHCP y servidor Kea.
-3. Guía del examen facilitada por el usuario.
-
-Las referencias a diapositivas están incluidas en el juego.
-
-Los casos nuevos se identifican como aplicación razonada cuando combinan
-conceptos de los apuntes. No deben confundirse con resultados observados
-en una práctica real.
-
-No se han consultado fuentes externas para ampliar el temario.
-
-### Advertencia sobre cobertura
-
-Se han registrado los 52 puntos de la guía, sin omitir categorías.
-Eso NO significa que los PDF disponibles desarrollen todos sus detalles.
-
-Hay 8 objetivos con cobertura documental parcial:
-
-| ID | Parte que falta desarrollar |
-|---|---|
-| S7 | Reenvío del agente y secuencia práctica de `ssh -A` |
-| D2 | Broadcast/unicast de todos los mensajes DORA y sus condiciones |
-| K6 | Sintaxis y condiciones de configuración de reservas Kea |
-| K8 | Comando, filtro e interpretación de captura real con `tcpdump` |
-| X1 | Comprobaciones concretas en Linux y Windows al apagar DHCP |
-| X2 | Procedimiento y resultados ante cambios con concesiones activas |
-| X3 | Corrección persistente de rutas por defecto duplicadas |
-| X4 | No tiene laguna marcada: se plantea como lista de comprobación razonada |
-
-**Corrección del recuento de la tabla:** X4 es una aclaración, no un
-objetivo parcial. Los objetivos marcados con laguna en el banco son
-**S7, D2, K6, K8, X1, X2 y X3: 7 en total**.
-
-El contador de la aplicación se calcula directamente del banco y
-muestra esos 7 objetivos parciales.
-
-Se incluyen ejercicios sobre las partes justificables, pero se señala
-lo que falta. Un objetivo con laguna no pasa a considerarse totalmente
-cubierto por acertar el ejercicio.
-
-Para completar estos apartados se necesita la práctica correspondiente
-o apuntes adicionales. No se han inventado soluciones y atribuido al PDF.
-
-### Interpretación del progreso
-
-Hay dos indicadores distintos:
-
-1. **Práctica:** modalidades superadas de un total de 104.
-2. **Objetivos sin laguna documental y con ambas modalidades superadas.**
-
-Con el banco actual, el segundo indicador no puede alcanzar 52/52:
-los siete objetivos parciales siguen pendientes de material.
-
-Completar nueve jefes tampoco demuestra que se haya realizado una
-práctica real sobre máquinas Linux y Windows.
-
-## Inventario de objetivos
-
-| Sala | IDs | Cantidad |
+| Bloque | IDs | Objetivos |
 |---|---|---:|
 | SSH | S1–S7 | 7 |
 | sudo | U1–U4 | 4 |
 | Nombre del equipo | H1–H3 | 3 |
-| Red | R1–R5 | 5 |
+| Configuración de red | R1–R5 | 5 |
 | Resolución de nombres | N1–N5 | 5 |
 | Router y NAT | T1–T7 | 7 |
 | DHCP | D1–D9 | 9 |
 | Kea | K1–K8 | 8 |
-| Comprobación y razonamiento | X1–X4 | 4 |
+| Diagnóstico | X1–X4 | 4 |
 | **Total** | | **52** |
 
-### SSH
+Fuentes académicas:
 
-- S1: simétrico frente a asimétrico.
-- S2: firma y reto.
-- S3: autenticación paso a paso.
-- S4: ubicación de claves.
-- S5: claves frente a contraseñas.
-- S6: ssh-keygen y ssh-copy-id.
-- S7: salto por router y ssh -A.
+- Configuración inicial de un servidor Linux.
+- Protocolo DHCP y servidor Kea.
+- Guía del examen facilitada por el usuario.
 
-### sudo
+Las referencias aparecen en cada explicación.
 
-- U1: root, mínimo privilegio, auditoría y control.
-- U2: sudoers, sudoers.d y visudo.
-- U3: NOPASSWD.
-- U4: comprobación con sudo -k.
+Las situaciones compuestas a partir de conceptos de los apuntes se
+identifican como aplicaciones razonadas, no como prácticas observadas.
 
-### Nombre del equipo
+No se ha utilizado la investigación visual sobre Dragon Ball para
+ampliar el contenido académico.
 
-- H1: hostname y FQDN.
-- H2: hostname y hosts.
-- H3: hostnamectl y comprobaciones.
+## Siete objetivos con cobertura documental parcial
 
-### Red
+Los PDF disponibles no desarrollan todos los detalles exigidos:
 
-- R1: interfaz, IP, máscara, gateway y DNS.
-- R2: estático frente a dinámico.
-- R3: gestores y ubicaciones.
-- R4: configuración persistente estática y DHCP.
-- R5: consulta de configuración activa.
+| ID | Material que falta |
+|---|---|
+| S7 | Reenvío del agente y práctica de ssh -A |
+| D2 | Condiciones broadcast/unicast de todos los mensajes DORA |
+| K6 | Sintaxis y condiciones de reservas Kea |
+| K8 | Captura real y uso de tcpdump |
+| X1 | Comprobaciones específicas en Linux y Windows al apagar DHCP |
+| X2 | Práctica sobre cambios con concesiones activas |
+| X3 | Corrección persistente de rutas por defecto duplicadas |
 
-### Resolución
+Estos puntos no se ocultan ni se consideran completamente cubiertos
+por superar sus ejercicios.
 
-- N1: NSS y hosts:.
-- N2: hosts frente a resolv.conf.
-- N3: systemd-resolved.
-- N4: DNS directo frente a NSS.
-- N5: resolución estática aplicada.
+La aplicación distingue:
 
-### Router
+1. Modalidades practicadas: máximo 104.
+2. Objetivos con ambas modalidades y sin laguna: máximo 45 con este banco.
 
-- T1: forwarding persistente.
-- T2: SNAT frente a DNAT.
-- T3: MASQUERADE.
-- T4: iptables-nft.
-- T5: construcción de reglas.
-- T6: persistencia y arranque.
-- T7: entrada exterior por el router.
-
-### DHCP
-
-- D1: finalidad y puertos.
-- D2: DORA y difusión.
-- D3: REQUEST y ACK con varios servidores.
-- D4: estados.
-- D5: T1, T2 y T3.
-- D6: renovación y respuestas.
-- D7: INIT-REBOOT.
-- D8: ámbito, rango, concesión y reserva.
-- D9: parámetros enviados.
-
-### Kea
-
-- K1: servicios y archivos.
-- K2: estructura de configuración.
-- K3: subred frente a pool.
-- K4: ámbito completo.
-- K5: varios ámbitos.
-- K6: reserva y DNAT.
-- K7: concesiones y registros.
-- K8: captura e identificación.
-
-### Diagnóstico
-
-- X1: apagar DHCP.
-- X2: cambiar configuración con concesión activa.
-- X3: interfaz pública y ruta por defecto.
-- X4: comprobación después del reinicio.
+Para alcanzar una cobertura documental completa se deben incorporar
+las prácticas que faltan y revisar las preguntas correspondientes.
 
 ## Guardado
 
-Clave local:
+Se utiliza la misma clave que en la versión anterior:
 
     rootquest-servicios1-v1
 
-La partida se guarda en localStorage cuando el navegador lo permite.
+Se intenta recuperar el progreso anterior si se abre desde el mismo
+navegador y origen.
 
-Incluye:
+El guardado incluye:
 
-- Vidas.
-- XP.
-- Pociones.
+- Vida, XP, ki, racha y senzu.
+- Personaje.
 - Modalidades superadas.
 - Intentos y errores.
 - Jefes vencidos.
 - Última sala.
-- Preferencia de sonido.
+- Sonido.
 - Hasta 200 resultados recientes.
 
-No guarda los textos de las respuestas abiertas.
+No incluye los textos de las respuestas abiertas.
 
-El guardado depende del navegador y del origen desde el que se abre el
-archivo. No se promete que una partida abierta como archivo local se
-comparta con una versión alojada ni con otro navegador.
+No se sincroniza con GitHub ni se envía a un servidor.
 
-Exporta una copia antes de cambiar de equipo o ubicación.
+Exportar una copia antes de cambiar de navegador, dispositivo o
+ubicación del archivo.
 
-### Exportación e importación
+## Herramientas
 
 Desde Partida:
 
-- Exportar partida: descarga un JSON.
-- Importar partida: valida el JSON antes de sustituir el progreso.
-- Exportar matriz: descarga un resumen de cobertura en Markdown.
-- Reiniciar: solicita confirmación.
+- Exportar progreso como JSON.
+- Importar progreso con validación.
+- Exportar cobertura como Markdown.
+- Cambiar personaje.
+- Activar sonido.
+- Reiniciar progreso con confirmación.
 
-El archivo de progreso es editable por su propietario.
-No está diseñado como sistema antifraude ni como calificación oficial.
+## Validaciones incluidas
 
-## Verificación incluida
+Al arrancar se comprueba:
 
-Al cargar, el código comprueba:
-
-- Exactamente 52 objetivos.
+- 52 objetivos.
 - IDs únicos.
-- Distribución correcta por salas.
-- Pregunta y variante presentes.
-- Solución y explicación presentes.
-- Dos distractores por reconocimiento.
+- Distribución correcta entre salas.
 - Tres criterios por respuesta abierta.
-- Ausencia de opciones duplicadas en una pregunta.
+- Pregunta, respuesta y explicación presentes.
+- Opciones sin duplicados dentro de cada pregunta.
+- Siete objetivos parciales identificados.
 
-Si falla la estructura del banco, se lanza un error.
+Estas validaciones no sustituyen las pruebas de ejecución de la interfaz.
 
-Estas comprobaciones NO equivalen a pruebas de interfaz ejecutadas.
+El código no se ejecutó en un navegador durante su entrega en la
+conversación.
+
+## Si no arranca
+
+Hay un bloque de diagnóstico independiente del motor del juego.
+
+Si se produce un error de JavaScript, intenta mostrar:
+
+- Mensaje.
+- Número de línea.
+
+Si la página sigue mostrando solamente “Preparando el radar”, revisar
+la consola del navegador y confirmar que se ha copiado el archivo
+completo, incluidos los dos bloques de script y el cierre de HTML.
 
 ## Pruebas manuales recomendadas
 
-El código entregado no se ha ejecutado en un navegador desde la
-conversación en la que se generó.
+- [ ] Aparecen las nueve sagas.
+- [ ] El temario muestra 52 objetivos.
+- [ ] Se indican siete objetivos parciales.
+- [ ] Un acierto muestra explicación, XP y ataque.
+- [ ] Un error muestra explicación y resta vida.
+- [ ] La guardia consume ki y evita daño, pero no acredita el fallo.
+- [ ] Una senzu restaura vida.
+- [ ] Una pista impide acreditar el intento.
+- [ ] El cuaderno marca el intento como asistido.
+- [ ] Una respuesta abierta requiere comparación con criterios.
+- [ ] No se puede puntuar dos veces el mismo intento.
+- [ ] Los jefes se desbloquean tras completar la sala.
+- [ ] Llegar a cero vidas permite recuperarse.
+- [ ] La recarga conserva progreso cuando el navegador permite guardarlo.
+- [ ] Exportar e importar funciona.
+- [ ] Se rechaza un JSON inválido.
+- [ ] La interfaz se puede usar con teclado y en móvil.
 
-Antes de depender de él para estudiar, comprobar:
+## Objetivo del proyecto
 
-- [ ] El mapa muestra nueve salas.
-- [ ] La matriz muestra 52 objetivos.
-- [ ] La auditoría muestra 7 objetivos parciales.
-- [ ] Responder bien incrementa XP.
-- [ ] Responder mal resta una vida y muestra explicación.
-- [ ] No puede puntuarse varias veces el mismo intento.
-- [ ] Una pista impide acreditar la modalidad.
-- [ ] Las respuestas abiertas muestran su rúbrica.
-- [ ] El jefe se desbloquea tras practicar todos los terminales.
-- [ ] Tres respuestas completas vencen al jefe.
-- [ ] Llegar a cero vidas permite volver al refugio.
-- [ ] Recargar conserva progreso si localStorage está disponible.
-- [ ] Exportar e importar conserva el progreso.
-- [ ] Importar un JSON inválido muestra un aviso.
-- [ ] El juego resulta usable en móvil.
-- [ ] Puede recorrerse con teclado.
-- [ ] Reducir movimiento desactiva las animaciones.
-
-## Cómo ampliar los apartados pendientes
-
-El banco está dentro de `index.html`, en llamadas a `add(...)`.
-
-Para completar una laguna:
-
-1. Obtener la práctica o fuente autorizada.
-2. Añadir una explicación sustentada en ese material.
-3. Mejorar el ejercicio práctico y la rúbrica.
-4. Actualizar la referencia.
-5. Eliminar `gap` únicamente cuando el objetivo esté desarrollado.
-6. Revisar de nuevo la matriz de cobertura.
-
-No eliminar las advertencias solamente para que el contador llegue
-al 100 %.
-
-## Uso recomendado antes del examen
-
-1. Hacer reconocimiento sin consultar el cuaderno.
-2. Explicar la misma idea con palabras propias.
-3. Revisar los fallos.
-4. Realizar las prácticas reales de comandos y configuración.
-5. Resolver los apartados con material pendiente.
-6. Terminar con el simulacro mixto.
-
-Ganar al jefe es el incentivo.
-Poder explicar por qué funciona la red es el objetivo.
+La ambientación motiva el repaso.
+El objetivo real es poder explicar, configurar y comprobar los servicios
+sin depender de respuestas de opción múltiple.
