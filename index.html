@@ -1,0 +1,1428 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1020">
+<title>ROOT QUEST · Examen de servicios</title>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#080d19;--panel:#111b2e;--panel2:#17243b;
+  --text:#edf3ff;--muted:#b1bed5;--line:#31415f;
+  --cyan:#6ee7ff;--green:#80edb0;--red:#ff8093;
+  --gold:#ffdb86;--purple:#baa0ff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:
+  radial-gradient(ellipse at top,#19254a 0,transparent 65%),var(--bg);
+  color:var(--text);font:16px/1.6 system-ui,sans-serif;
+}
+button,input,textarea,select{font:inherit}
+button{
+  border:1px solid var(--line);background:var(--panel2);color:var(--text);
+  border-radius:12px;padding:10px 16px;cursor:pointer;
+  transition:transform .15s,background .15s,border-color .15s;
+}
+button:hover:not(:disabled){transform:translateY(-2px);border-color:var(--cyan)}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.primary{background:#21566d;border-color:var(--cyan)}
+button.danger{border-color:var(--red)}
+button.good{border-color:var(--green)}
+button:focus-visible,a:focus-visible,summary:focus-visible,
+textarea:focus-visible,input:focus-visible{
+  outline:3px solid var(--gold);outline-offset:4px
+}
+h1,h2,h3{line-height:1.2}
+h1{font-size:clamp(26px,5vw,44px);margin:0}
+h2{font-size:clamp(22px,4vw,30px)}
+p{margin:.65em 0}
+small,.muted{color:var(--muted)}
+header,.wrap{max-width:1180px;margin:auto;padding:20px}
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:16px;flex-wrap:wrap;
+}
+.brand{color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:3px}
+nav,.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.panel{
+  background:linear-gradient(145deg,#142039ed,#0e1728ed);
+  border:1px solid var(--line);border-radius:20px;padding:23px;
+  margin-bottom:18px;box-shadow:0 14px 45px #0003;
+}
+.notice{border-left:4px solid var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:15px}
+.card{padding:20px;border:1px solid var(--line);border-radius:17px;background:#121d31}
+.card h3{margin-top:8px}
+.card.complete{border-color:var(--green)}
+.badge{
+  display:inline-block;font-size:12px;border:1px solid var(--line);
+  padding:3px 9px;border-radius:20px;color:var(--muted)
+}
+.badge.partial{color:var(--gold);border-color:#8e6f38}
+.badge.ok{color:var(--green)}
+progress{
+  width:100%;height:13px;border:0;border-radius:30px;
+  overflow:hidden;accent-color:var(--cyan)
+}
+progress::-webkit-progress-bar{background:#26344d}
+progress::-webkit-progress-value{background:var(--cyan)}
+.hud{
+  display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px;
+  margin-bottom:14px
+}
+.hud strong{display:block}
+.hearts{color:var(--red);letter-spacing:3px;font-size:21px}
+.scene{
+  min-height:230px;position:relative;overflow:hidden;
+  border:1px solid #44516c;border-radius:18px;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 79px,#263653 80px 82px),
+    linear-gradient(#10192c 0 72%,#27354c 72% 74%,#0b1425 74%);
+  margin:16px 0;
+}
+.scene:before{
+  content:"";position:absolute;left:7%;top:20px;width:60px;height:90px;
+  background:repeating-linear-gradient(#152d3e 0 12px,#78ecd6 13px 15px,#152d3e 16px 22px);
+  box-shadow:175px 0 #142a3a,350px 0 #142a3a,525px 0 #142a3a;
+  border:5px solid #32415e;opacity:.55
+}
+.actor{
+  position:absolute;bottom:36px;text-align:center;
+  transition:left .65s ease,filter .3s;z-index:2;
+}
+.hero{left:12%;font-size:56px}
+.enemy{left:77%;font-size:64px;animation:float 2.2s ease-in-out infinite}
+.actor label{
+  display:block;font-size:11px;background:#08101edb;border:1px solid #556581;
+  padding:2px 7px;border-radius:8px;color:#fff
+}
+.orb{
+  position:absolute;left:26%;bottom:90px;opacity:0;
+  width:20px;height:20px;background:var(--cyan);border-radius:50%;
+  box-shadow:0 0 28px var(--cyan)
+}
+.scene.attack .orb{animation:bolt .65s ease-out}
+.scene.attack .enemy{animation:enemyHit .65s}
+.scene.hurt{animation:shake .5s}
+.scene.hurt .hero{animation:knock .65s}
+.scene.hurt:after{
+  content:"";position:absolute;inset:0;background:#ff264244;
+  animation:fade .7s forwards;pointer-events:none;z-index:3
+}
+.floatText{
+  position:absolute;left:47%;top:60px;color:var(--gold);
+  font-size:24px;font-weight:900;text-shadow:0 2px 8px #000;
+  animation:rise 1s both;z-index:4
+}
+@keyframes float{50%{transform:translateY(-9px)}}
+@keyframes bolt{0%{opacity:1}95%{opacity:1}100%{left:79%;opacity:0}}
+@keyframes enemyHit{50%{transform:translateX(20px);filter:brightness(2)}}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+@keyframes knock{50%{transform:translateX(-45px);filter:sepia(1) saturate(5)}}
+@keyframes fade{to{opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(-15px)}}
+@keyframes confetti{to{transform:translateY(100vh) rotate(550deg);opacity:0}}
+.confetti{position:fixed;top:-20px;width:9px;height:15px;z-index:99;pointer-events:none;animation:confetti 2s ease-in forwards}
+.route{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.node{min-width:40px;padding:7px;border-radius:9px}
+.node.done{background:#184c3c;border-color:var(--green)}
+.node.current{outline:2px solid var(--cyan)}
+.question{white-space:pre-wrap;font-size:20px;font-weight:650}
+.options{display:grid;gap:10px;margin:18px 0}
+.option{text-align:left;white-space:pre-wrap;width:100%}
+.option.correct{background:#164633;border-color:var(--green)}
+.option.wrong{background:#582637;border-color:var(--red)}
+textarea{
+  width:100%;min-height:165px;background:#080f1d;color:var(--text);
+  border:1px solid var(--line);border-radius:12px;padding:15px;
+  resize:vertical;margin:12px 0
+}
+.feedback{border:1px solid var(--line);border-radius:15px;padding:18px;margin-top:18px}
+.feedback.good{border-color:var(--green)}
+.feedback.bad{border-color:var(--red)}
+.model{
+  white-space:pre-wrap;overflow-wrap:anywhere;
+  background:#080f1d;padding:15px;border-radius:10px;
+  font:14px/1.7 ui-monospace,Consolas,monospace;
+}
+.rubric{display:block;margin:10px 0}
+.rubric input{margin-right:10px}
+dialog{
+  width:min(900px,94vw);max-height:88vh;overflow:auto;
+  color:var(--text);background:var(--panel);
+  border:1px solid var(--line);border-radius:20px;padding:25px;
+}
+dialog::backdrop{background:#000b;backdrop-filter:blur(5px)}
+details{border-top:1px solid var(--line);padding:12px 0}
+summary{cursor:pointer}
+.auditItem{padding:15px 0;border-bottom:1px solid var(--line)}
+.search{
+  width:100%;padding:10px;border-radius:9px;background:#0b1324;
+  color:white;border:1px solid var(--line);margin-bottom:15px
+}
+#toast{
+  position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+  max-width:90vw;background:#203d50;border:1px solid var(--cyan);
+  color:white;padding:12px 20px;border-radius:12px;z-index:110;
+}
+.hidden{display:none!important}
+footer{max-width:1180px;margin:auto;padding:15px 20px 35px;color:var(--muted);font-size:13px}
+@media(max-width:650px){
+  header,.wrap{padding:13px}.panel{padding:17px}
+  .hud{grid-template-columns:1fr 1fr}.hud>div:last-child{grid-column:1/-1}
+  .hero{font-size:44px}.enemy{left:74%;font-size:49px}
+  .scene{min-height:210px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">EXAMEN-SERVICIOS1 / JUANKAFDEZ05</div>
+    <h1>ROOT QUEST <span aria-hidden="true">⚡</span></h1>
+    <small>Reconstruye la red. Entiende cada decisión.</small>
+  </div>
+  <nav aria-label="Menú principal">
+    <button id="mapBtn">🗺️ Salas</button>
+    <button id="auditBtn">📋 Los 52 objetivos</button>
+    <button id="notesBtn">📚 Cuaderno</button>
+    <button id="settingsBtn">⚙️ Partida</button>
+  </nav>
+</header>
+<main class="wrap" id="app"></main>
+<footer>
+  Material: Configuración inicial de un servidor Linux, DHCP/Kea y guía del examen.
+  Sin servicios externos, analítica ni cuentas. Simulación educativa: no ejecuta comandos.
+</footer>
+<dialog id="modal"></dialog>
+<div id="toast" class="hidden" role="status"></div>
+<script>
+"use strict";
+
+/*
+BANCO DE CONTENIDO
+52 objetivos, uno por punto de la guía.
+Cada objetivo tiene:
+- prueba de reconocimiento;
+- variante de explicación/aplicación con rúbrica;
+- solución y referencia;
+- laguna documental explícita, si existe.
+
+Las preguntas abiertas son AUTOEVALUADAS. No se finge una corrección semántica.
+Las claves "gap" impiden considerar completo el dominio documental del objetivo.
+*/
+const ROOMS=[
+  ["🔐","Bastión SSH","El Guardián de las Claves","🧙",
+   "Demuestra tu identidad sin entregar tu secreto."],
+  ["🛡️","Fortaleza sudo","El Root Descontrolado","👹",
+   "Recupera los privilegios sin convertir cada error en una catástrofe."],
+  ["🏷️","Archivo de Identidades","El Sin Nombre","👻",
+   "Devuelve a cada máquina un nombre coherente."],
+  ["🌐","Sala de Interfaces","El Desconectador","🤖",
+   "Repara direcciones, rutas y configuración persistente."],
+  ["🔎","Laberinto NSS","El Falso DNS","🕷️",
+   "Averigua qué fuente está resolviendo realmente los nombres."],
+  ["🚦","Frontera NAT","El Dragón del Router","🐉",
+   "Abre la salida de la LAN y publica el servicio correcto."],
+  ["📡","Torre DHCP","El Devorador de Leases","👾",
+   "Domina el ciclo de vida de una concesión."],
+  ["⚙️","Motor Kea","El Corruptor de JSON","🦑",
+   "Reconstruye el servidor que reparte la configuración."],
+  ["🔥","Sala del Reinicio","El Apagón Final","💀",
+   "Comprueba el escenario cuando todo cambia o se reinicia."]
+];
+const DATA=[];
+function add(room,id,title,question,answer,wrong,why,challenge,rubric,source,gap=""){
+  DATA.push({room,id,title,question,answer,wrong,why,challenge,rubric,source,gap});
+}
+const C=p=>"Configuración inicial · diapositivas "+p;
+const D=p=>"DHCP/Kea · diapositivas "+p;
+const G="Guía del examen proporcionada por el usuario";
+
+// SSH: 1–7
+add(0,"S1","Cifrado simétrico y asimétrico",
+"¿Qué reparto de funciones describe el modelo de tus apuntes?",
+"Simétrico: tráfico de la sesión. Asimétrico: autenticación por claves.",
+["Asimétrico: tráfico por ser más rápido. Simétrico: par pública/privada.",
+"Con clave pública el canal deja de cifrarse."],
+"El simétrico usa una misma clave para cifrar y descifrar y es rápido. El asimétrico utiliza un par de claves. Los apuntes distinguen el cifrado del canal de la autenticación.",
+"Explica a una persona que empieza por qué SSH combina ambos tipos de criptografía. Distingue número de claves, rapidez y función.",
+["Distingo una clave simétrica de un par asimétrico.",
+"Relaciono la rapidez del simétrico con el tráfico de la sesión.",
+"No confundo cifrar el canal con autenticar al usuario."],C("3–5"));
+
+add(0,"S2","Firma y reto criptográfico",
+"¿Cómo demuestra el cliente que posee su clave privada?",
+"Firma el reto con la privada y el servidor verifica con la pública.",
+["Envía la privada para que el servidor la compare.",
+"Firma con la pública y pide al servidor su privada."],
+"La idea que debes conservar es posesión de la privada sin transmitirla: firma en el cliente y verificación con la pública autorizada. El PDF presenta un modelo didáctico de reto y firma.",
+"El servidor ya conoce tu clave pública. Explica qué prueba le proporciona una firma del reto y qué secreto no debe viajar.",
+["La firma se realiza con la privada.",
+"La verificación usa la pública.",
+"Explico que demuestra posesión de la privada sin enviarla."],C("6–8"));
+
+add(0,"S3","Secuencia de autenticación",
+"¿Qué secuencia coincide con el esquema del PDF?",
+"Solicitud de usuario → claves autorizadas → reto → firma → verificación.",
+["Solicitud → envío de privada → contraseña de root → verificación.",
+"Firma del servidor → borrado de authorized_keys → acceso."],
+"Según el esquema didáctico: el cliente solicita una cuenta, se consultan sus claves autorizadas, se plantea un reto, el cliente firma y el servidor verifica antes de autorizar.",
+"Reconstruye los cinco pasos de autenticación por clave pública del esquema de los apuntes, indicando quién actúa.",
+["Empiezo por cliente y cuenta del servidor.",
+"Menciono consulta de claves autorizadas y reto.",
+"Termino con firma del cliente y verificación del servidor."],C("8"));
+
+add(0,"S4","Ubicación de las claves",
+"¿Dónde se instala la pública que autoriza el acceso a una cuenta remota?",
+"En ~/.ssh/authorized_keys de esa cuenta en el servidor.",
+["En /etc/resolv.conf del cliente.",
+"La privada se instala en authorized_keys del servidor."],
+"La privada permanece en el cliente. La pública se incorpora a ~/.ssh/authorized_keys del usuario remoto. El archivo reúne las claves autorizadas para esa cuenta.",
+"Un compañero ha copiado la privada al servidor y la pública a /etc/hosts. Corrige ambos errores y explica qué cuenta importa.",
+["Mantengo la privada en el cliente.",
+"Coloco la pública en ~/.ssh/authorized_keys.",
+"Especifico que pertenece al usuario remoto al que se accede."],C("7–9"));
+
+add(0,"S5","Clave pública frente a contraseña",
+"¿Cuál es una ventaja real, aunque SSH ya cifre el canal?",
+"Demostrar posesión de una privada sin enviarla y evitar depender de una contraseña adivinable.",
+["La contraseña de SSH siempre viaja en texto claro.",
+"Una clave pública permite entrar sin poseer la privada correspondiente."],
+"SSH ya cifra credenciales y tráfico. La diferencia es el método de demostrar la identidad: la clave pública permite verificar posesión de la privada, mientras una contraseña depende de la fortaleza de ese secreto y resiste peor intentos de adivinación.",
+"Refuta: «SSH con claves es mejor porque SSH con contraseña no cifra». Da dos ventajas del método por claves.",
+["Aclaro que el canal SSH también cifra cuando se usa contraseña.",
+"Explico la prueba de posesión de la privada.",
+"Menciono resistencia a adivinación o automatización."],C("3–4"));
+
+add(0,"S6","ssh-keygen y ssh-copy-id",
+"¿Qué pareja genera las claves e instala la pública?",
+"ssh-keygen y ssh-copy-id.",
+["ssh-copy-id genera la privada; hostnamectl instala la pública.",
+"ip route y visudo."],
+"ssh-keygen genera el par en el cliente y permite proteger la privada con passphrase. ssh-copy-id añade la pública al authorized_keys de la cuenta remota.",
+"Describe el procedimiento con ssh-keygen y ssh-copy-id. Indica qué crea cada herramienta y qué archivo remoto termina modificado.",
+["Uso ssh-keygen para generar el par.",
+"Uso ssh-copy-id para instalar solo la pública.",
+"Identifico ~/.ssh/authorized_keys y no copio la privada."],C("9"));
+
+add(0,"S7","Salto por router y ssh -A",
+"¿Qué práctica contradice el principio de custodia de claves de los apuntes?",
+"Copiar la clave privada al router para realizar el salto.",
+["Mantener la privada en el cliente.",
+"Instalar una pública en la cuenta que debe autorizar el acceso."],
+"El PDF insiste en que la privada permanece en el cliente. Tu guía exige además explicar ssh -A y el salto por router, pero ese mecanismo no está desarrollado en el material localizado.",
+"Explica el salto cliente → router → servidor interno y el papel de ssh -A. Separa lo que puedes justificar con el PDF de lo que falta en la práctica.",
+["Mantengo la privada en el cliente.",
+"Identifico el router como salto hacia el servidor interno.",
+"Reconozco que falta una explicación documentada de ssh -A."],C("7–9")+"; "+G,
+"Falta el desarrollo del reenvío del agente, sus requisitos y la secuencia práctica de ssh -A. No se certifica dominio de este punto.");
+
+// SUDO: 8–11
+add(1,"U1","root, mínimo privilegio y auditoría",
+"¿Qué mejora aporta sudo frente a trabajar siempre como root?",
+"Permisos limitables y registro del usuario real que ejecuta la tarea.",
+["Hace imposible cometer errores administrativos.",
+"Obliga a compartir entre todos la contraseña de root."],
+"Como root, un error puede dañar el sistema y las acciones quedan bajo un identificador común. sudo permite delegar por usuario o grupo y limitar comandos, con trazabilidad.",
+"Hay tres administradores usando la misma cuenta root. Explica dos problemas y cómo sudo ayuda a resolverlos.",
+["Menciono riesgo por exceso de privilegios.",
+"Explico auditoría con el usuario real.",
+"Menciono límites por comandos, usuario o grupo."],C("11–12"));
+
+add(1,"U2","sudoers, sudoers.d y visudo",
+"¿Cuál es la combinación correcta?",
+"/etc/sudoers: principal; /etc/sudoers.d/: modular; visudo: validación.",
+["sudoers.d contiene las contraseñas y visudo cambia el hostname.",
+"Ambos archivos son registros y se editan con journalctl."],
+"/etc/sudoers define reglas principales; sudoers.d permite añadir reglas modulares. visudo valida la sintaxis para reducir el riesgo de perder acceso administrativo.",
+"Explica por qué crear una regla modular no equivale a editar cualquier archivo sin validación. Compara los dos lugares y la función de visudo.",
+["Distingo archivo principal de directorio modular.",
+"Menciono que ambos aportan reglas de sudo.",
+"Explico la validación sintáctica de visudo."],C("13–14"));
+
+add(1,"U3","sudo sin contraseña",
+"¿Qué regla del ejemplo permite sudo sin contraseña a juan?",
+"juan ALL=(ALL) NOPASSWD:ALL",
+["%juan ALL=(ALL) ALL",
+"juan NOPASSWD=/etc/hostname"],
+"NOPASSWD evita solicitar la contraseña. El prefijo % identifica un grupo. El ejemplo autoriza todos los comandos: no debe confundirse con una regla de mínimo privilegio limitada.",
+"Escribe la regla del ejemplo para juan y explica NOPASSWD y el significado de % cuando aparece delante de un nombre.",
+["Escribo juan ALL=(ALL) NOPASSWD:ALL.",
+"Explico que NOPASSWD evita pedir contraseña.",
+"Distingo usuario de grupo mediante %."],C("14"));
+
+add(1,"U4","Comprobar sudo sin caché",
+"Según tu guía, ¿qué comando evita confundir NOPASSWD con una autenticación recordada?",
+"sudo -k",
+["hostname -f","ssh-keygen"],
+"La guía pide usar sudo -k antes de repetir una orden con sudo para comprobar que no se está aprovechando una autenticación anterior. La ausencia de una segunda petición, por sí sola, no prueba NOPASSWD.",
+"Ya ejecutaste sudo y ahora no pide contraseña. Diseña la comprobación exigida por la guía antes de dar por válida tu regla.",
+["No concluyo NOPASSWD solo porque una segunda ejecución no pregunte.",
+"Incluyo sudo -k antes de repetir la comprobación.",
+"Relaciono el resultado con la regla del usuario."],G+"; "+C("14"));
+
+// HOSTNAME: 12–14
+add(2,"H1","Hostname y FQDN",
+"En sauron.mordor.com, ¿qué representa sauron?",
+"El hostname corto; sauron.mordor.com es el FQDN.",
+["El DNS público; mordor es la máscara.",
+"El FQDN; el nombre completo es solo mordor.com."],
+"Hostname es el nombre corto. FQDN incluye nombre del equipo y dominio. Los ejemplos de los apuntes usan sauron y sauron.mordor.com.",
+"Propón un hostname y su FQDN y explica qué información adicional contiene el segundo.",
+["Doy un nombre corto.",
+"Doy un nombre completo con dominio.",
+"No confundo nombre del equipo con su dirección IP."],C("16"));
+
+add(2,"H2","/etc/hostname y /etc/hosts",
+"¿Qué combinación sigue el ejemplo de los apuntes?",
+"/etc/hostname: sauron; /etc/hosts: 127.0.1.1 sauron.mordor.com sauron",
+["/etc/hostname contiene IP, DNS y gateway.",
+"/etc/hosts almacena las claves públicas SSH."],
+"En el modelo de los apuntes, /etc/hostname contiene una línea con el nombre corto. /etc/hosts asocia IP, FQDN y nombre corto para resolución estática coherente.",
+"Escribe el contenido esencial de ambos archivos para sauron.mordor.com e indica por qué deben ser coherentes.",
+["En hostname pongo solo sauron.",
+"En hosts incluyo IP, FQDN y sauron.",
+"Explico la resolución local coherente."],C("17"));
+
+add(2,"H3","Cambiar y comprobar el nombre",
+"¿Qué NO modifica automáticamente hostnamectl según el PDF?",
+"/etc/hosts",
+["El hostname en ejecución.","/etc/hostname al cambiar el nombre estático."],
+"hostnamectl set-hostname sauron aplica el nombre y lo hace persistente. /etc/hosts requiere ajuste aparte. La guía pide comprobar con hostname y hostname -f.",
+"Describe el cambio a sauron.mordor.com: orden hostnamectl, archivo adicional y dos comprobaciones exigidas.",
+["Uso hostnamectl set-hostname sauron.",
+"Ajusto /etc/hosts con FQDN y nombre corto.",
+"Compruebo hostname y hostname -f."],C("17–18")+"; "+G);
+
+// RED: 15–19
+add(3,"R1","Parámetros de red",
+"¿Qué parámetro dirige el tráfico hacia otras redes?",
+"La puerta de enlace.",
+["La máscara es el servidor que reenvía los paquetes.",
+"El hostname sustituye a la puerta de enlace."],
+"La interfaz transporta el tráfico; la IP identifica al equipo; la máscara delimita la subred; la puerta de enlace permite alcanzar otras redes; DNS traduce nombres.",
+"Relaciona interfaz, IP, máscara, gateway y DNS con su función. Explica qué parámetro revisar si solo falla el acceso a otras redes.",
+["Defino interfaz, IP y máscara.",
+"Relaciono gateway con otras redes.",
+"Relaciono DNS con nombres, no con el encaminamiento."],C("20"));
+
+add(3,"R2","Estático y dinámico",
+"¿Qué elección coincide con los usos típicos descritos?",
+"Estático para servidores estables; DHCP para clientes y movilidad.",
+["DHCP significa que la IP cambia en cada paquete.",
+"Estático evita planificar las direcciones."],
+"El direccionamiento estático se establece manualmente y requiere planificación. DHCP centraliza la asignación y la dirección puede cambiar entre concesiones.",
+"Elige un método para un servidor y para un portátil. Justifica ambos y distingue IP estática de asignación dinámica.",
+["Justifico la estabilidad de un servidor.",
+"Relaciono DHCP con administración centralizada.",
+"No afirmo que DHCP obligue a cambiar siempre de IP."],C("21"));
+
+add(3,"R3","Gestores de red y archivos",
+"¿Qué afirmación sobre Netplan es correcta?",
+"Lee YAML en /etc/netplan/ y traduce a NetworkManager o systemd-networkd.",
+["Sustituye a NSS y almacena claves SSH.",
+"Es el nombre de /etc/network/interfaces en Fedora."],
+"ifupdown: /etc/network/interfaces y interfaces.d/. NetworkManager: perfiles en /etc/NetworkManager/system-connections/. networkd: /etc/systemd/network/. Netplan: YAML en /etc/netplan/, con backend NM o networkd. Evita dos gestores sobre la misma interfaz.",
+"Construye una tabla mental con los cuatro gestores, sus ubicaciones y usos. Explica por qué no conviene mezclarlos sobre una interfaz.",
+["Relaciono ifupdown y NetworkManager con sus rutas.",
+"Relaciono networkd y Netplan con sus rutas.",
+"Explico el backend de Netplan y el riesgo de conflicto."],C("22–28"));
+
+add(3,"R4","Configuración persistente estática y DHCP",
+"Con ifupdown, ¿qué declaración configura eth1 por DHCP al arrancar?",
+"auto eth1\niface eth1 inet dhcp",
+["ip a eth1 persist forever",
+"iface eth1 inet dns\nhostname dhcp"],
+"El ejemplo persistente está en /etc/network/interfaces. Para estática utiliza auto, iface inet static, address, netmask, gateway y dns-nameservers. Para DHCP usa auto e iface inet dhcp. Se incluye también loopback.",
+"Escribe dos configuraciones ifupdown: eth0 estática 192.168.1.10/24 con gateway 192.168.1.1 y DNS; eth1 por DHCP. Incluye loopback.",
+["Incluyo auto lo e iface lo inet loopback.",
+"Uso static, address, netmask, gateway y dns-nameservers en eth0.",
+"Uso auto eth1 e iface eth1 inet dhcp."],C("23–24"));
+
+add(3,"R5","Consultar direcciones, rutas y DNS",
+"¿Qué pareja permite consultar direcciones y rutas?",
+"ip a e ip r (o ip route).",
+["ssh-keygen y ssh-copy-id.",
+"visudo y hostnamectl set-hostname."],
+"ip a muestra interfaces y direcciones. ip route muestra las rutas. En sistemas con systemd-resolved, resolvectl status muestra estado y DNS configurados. /etc/resolv.conf puede estar gestionado automáticamente.",
+"Diseña una comprobación de IP, ruta y DNS activos. Indica cuándo tiene sentido usar resolvectl status.",
+["Uso ip a para direcciones.",
+"Uso ip r o ip route para rutas.",
+"Uso resolvectl status cuando hay systemd-resolved y distingo resolv.conf."],C("23,34–37"));
+
+// NOMBRES: 20–24
+add(4,"N1","NSS y orden de hosts:",
+"¿Cómo se interpreta hosts: files dns?",
+"Primero archivos locales; después DNS.",
+["Primero DNS; después claves públicas.",
+"Solo consulta archivos de concesiones DHCP."],
+"NSS decide las fuentes y el orden para distintas categorías. La línea hosts: de /etc/nsswitch.conf regula la búsqueda de nombres de equipos.",
+"Un nombre existe en /etc/hosts y también en DNS. Explica qué indica hosts: files dns y qué archivo contiene esa política.",
+["Identifico /etc/nsswitch.conf.",
+"Explico files antes de dns.",
+"Distingo la política de consulta del contenido de las fuentes."],C("32–33"));
+
+add(4,"N2","hosts frente a resolv.conf",
+"¿Cuál es la función de /etc/resolv.conf?",
+"Indicar servidores DNS y posibles dominios de búsqueda y opciones.",
+["Almacenar todas las asociaciones estáticas IP-nombre.",
+"Guardar los usuarios con NOPASSWD."],
+"/etc/hosts es una tabla local estática de IP y nombres. /etc/resolv.conf configura los servidores DNS a consultar y puede regenerarse por otros servicios.",
+"Quieres asociar un nombre local a una IP sin tocar DNS. ¿Qué archivo eliges y por qué no resolv.conf?",
+["Elijo /etc/hosts.",
+"Explico que contiene asociaciones estáticas.",
+"Distingo configurar servidores DNS de definir un nombre local."],C("34"));
+
+add(4,"N3","systemd-resolved y 127.0.0.53",
+"¿Qué representa 127.0.0.53 en el contexto del PDF?",
+"El servidor DNS local de reenvío de systemd-resolved.",
+["Una IP pública del servidor Kea.",
+"La dirección broadcast de cualquier red."],
+"systemd-resolved centraliza resolución, aporta caché y un servidor local de reenvío en 127.0.0.53. La presencia de esa dirección no significa que sea el DNS remoto final.",
+"Un compañero cree que 127.0.0.53 es el DNS de Internet. Corrígelo y explica dónde consultar los DNS configurados.",
+["Identifico el servicio local systemd-resolved.",
+"Menciono reenvío y caché.",
+"Propongo resolvectl status."],C("35–37"));
+
+add(4,"N4","DNS directo frente a NSS",
+"¿Qué herramienta reproduce una consulta respetando NSS?",
+"getent hosts",
+["dig, siempre respetando el orden de files.",
+"host, siempre leyendo primero /etc/hosts."],
+"dig, host y nslookup consultan DNS directamente y no siguen el orden de NSS. getent hosts y getent ahosts sí consultan según NSS.",
+"dig devuelve una dirección distinta de getent hosts. Explica una causa compatible con los apuntes y cómo investigarla.",
+["Distingo consulta DNS directa de NSS.",
+"Reviso /etc/hosts.",
+"Reviso el orden hosts: en nsswitch.conf."],C("38–39"));
+
+add(4,"N5","Acceso mediante resolución estática",
+"¿Qué acción permite resolver localmente web.lab sin modificar el DNS global?",
+"Añadir su IP y nombre a /etc/hosts y comprobar con getent hosts.",
+["Añadir web.lab a authorized_keys.",
+"Cambiar el puerto del servidor DHCP."],
+"La resolución estática vincula un nombre con una dirección en /etc/hosts. NSS determina cómo se consulta esa fuente. getent permite comprobar ese camino.",
+"Redacta una entrada para web.lab en 192.168.1.100 y una comprobación que respete NSS. Explica qué cambia y qué no cambia.",
+["Escribo 192.168.1.100 web.lab.",
+"Uso getent hosts web.lab.",
+"Entiendo que el cambio es local y no modifica el DNS global."],C("32–34,38–39"));
+
+// ROUTER: 25–31
+add(5,"T1","IP forwarding persistente",
+"Según el PDF, ¿qué procedimiento es persistente en Debian 13?",
+"Crear /etc/sysctl.d/99-router.conf con net.ipv4.ip_forward = 1 y aplicar sysctl --system.",
+["Solo escribir 1 en /proc/sys/net/ipv4/ip_forward.",
+"Modificar /etc/hosts para que contenga forwarding."],
+"El reenvío permite pasar paquetes entre interfaces. El cambio en /proc es temporal. El PDF usa un archivo modular en /etc/sysctl.d/ y sysctl --system para aplicar.",
+"Compara activación temporal y persistente. Escribe el contenido del archivo persistente y el comando de aplicación.",
+["Explico reenvío entre interfaces.",
+"Escribo net.ipv4.ip_forward = 1 en /etc/sysctl.d/99-router.conf.",
+"Uso sysctl --system y distingo el cambio temporal."],C("42–43"));
+
+add(5,"T2","SNAT frente a DNAT",
+"¿Cuál es la correspondencia correcta?",
+"SNAT: origen/POSTROUTING/salida. DNAT: destino/PREROUTING/entrada.",
+["SNAT: destino/PREROUTING. DNAT: origen/POSTROUTING.",
+"Ambos cambian siempre solo el DNS."],
+"SNAT cambia la IP de origen al salir hacia Internet. DNAT cambia el destino al publicar un servicio interno. DNAT actúa antes de decidir el enrutamiento.",
+"Explica ambos mecanismos mediante un cliente que sale a Internet y un visitante que entra a una web interna. Incluye dirección y cadena.",
+["Asocio SNAT a origen y POSTROUTING.",
+"Asocio DNAT a destino y PREROUTING.",
+"Relaciono cada uno con el sentido y el caso de uso."],C("45–48"));
+
+add(5,"T3","MASQUERADE",
+"Si la interfaz pública obtiene una IP cambiante por DHCP, ¿qué propone el PDF?",
+"MASQUERADE, que toma la IP de la interfaz de salida.",
+["SNAT a una dirección antigua fijada para siempre.",
+"DNAT de todos los clientes hacia /etc/hosts."],
+"MASQUERADE evita indicar una IP pública fija. Es apropiado cuando puede cambiar, porque utiliza la dirección de la interfaz de salida.",
+"Explica por qué una regla SNAT con una IP antigua puede quedar desajustada y qué alternativa elegirías.",
+["Relaciono el problema con IP pública dinámica.",
+"Elijo MASQUERADE.",
+"Explico que toma la dirección de la interfaz de salida."],C("46"));
+
+add(5,"T4","iptables y nftables",
+"¿Qué es iptables-nft según el PDF?",
+"Una capa que traduce las reglas de iptables a nftables.",
+["Un servidor DHCP alternativo.",
+"Un archivo de claves públicas."],
+"nftables es el subsistema sucesor. nft es su herramienta nativa. Los apuntes indican que iptables puede funcionar mediante iptables-nft como compatibilidad.",
+"Refuta: «Si escribo iptables, necesariamente estoy usando un subsistema independiente de nftables».",
+["Menciono la compatibilidad iptables-nft.",
+"Distingo sintaxis iptables y herramienta nativa nft.",
+"Identifico nftables como sucesor."],C("44"));
+
+add(5,"T5","Construir reglas SNAT y DNAT",
+"¿Qué regla publica la web interna del ejemplo?",
+"iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to-destination 192.168.1.100:80",
+["iptables -t nat -A POSTROUTING -j DNS --to-host web",
+"iptables -A PREROUTING -j SNAT --to-source 192.168.1.100:80"],
+"Ejemplo SNAT:\niptables -t nat -A POSTROUTING -o eth0 -s 192.168.0.0/24 -j SNAT --to-source 192.0.2.1\nEjemplo DNAT:\niptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to-destination 192.168.1.100:80\nSon reglas de NAT del escenario; el router necesita también reenvío.",
+"Escribe ambas reglas del ejemplo: salida de 192.168.0.0/24 por eth0 con IP 192.0.2.1 y entrada TCP/80 a 192.168.1.100:80. Explica cada una.",
+["Uso POSTROUTING, origen de la LAN, salida y SNAT.",
+"Uso PREROUTING, entrada, TCP/80 y DNAT al servidor.",
+"Relaciono ambas con forwarding y el sentido correcto."],C("43,45–47"));
+
+add(5,"T6","Persistencia y arranque de reglas",
+"¿Qué secuencia del PDF guarda nftables y habilita su carga al arrancar?",
+"nft list ruleset > /etc/nftables.conf\nsystemctl enable --now nftables",
+["nft list ruleset > /etc/hostname",
+"Reiniciar basta: cualquier regla temporal se guarda sola."],
+"Las reglas no sobreviven por defecto. Con iptables-persistent se guarda IPv4 mediante iptables-save > /etc/iptables/rules.v4. Con nftables se guarda /etc/nftables.conf y se habilita el servicio. Después de modificar hay que guardar otra vez.",
+"Propón persistencia con iptables-persistent y con nftables. Después, explica qué compararías antes y después del reinicio.",
+["Incluyo /etc/iptables/rules.v4 y iptables-save.",
+"Incluyo /etc/nftables.conf y habilitar nftables.",
+"Compruebo reglas cargadas y funcionamiento después de reiniciar."],C("49")+"; "+G));
+
+add(5,"T7","Acceso exterior a un servidor interno",
+"En el escenario publicado mediante DNAT, ¿por dónde entra el visitante?",
+"Por el router, que traduce el destino hacia el servicio interno.",
+["Por la MAC del servidor directamente a través de Internet.",
+"Por el archivo authorized_keys del servidor Kea."],
+"El ejemplo de publicación redirige el tráfico que entra por la interfaz exterior del router hacia una IP y puerto internos. El visitante usa la entrada publicada del router; la regla identifica el destino interno.",
+"Dibuja en texto visitante → router → servidor web. Explica qué cambia DNAT y por qué el visitante usa el punto de entrada del router.",
+["Incluyo el router como entrada.",
+"Explico traducción de destino a IP y puerto internos.",
+"Relaciono la publicación con la regla DNAT y el reenvío."],C("42,47–48"));
+
+// DHCP: 32–40
+add(6,"D1","Finalidad y puertos DHCP",
+"¿Qué puertos utilizan servidor y cliente DHCP en los apuntes?",
+"Servidor UDP 67; cliente UDP 68.",
+["Servidor TCP 22; cliente TCP 80.",
+"Servidor UDP 68; cliente UDP 67."],
+"DHCP automatiza la asignación de configuración de red local. El servidor administra direcciones y concesiones; escucha en UDP 67 y el cliente en UDP 68.",
+"Explica para qué sirve DHCP y qué escucharía cada extremo. Añade dos parámetros que pueda entregar además de la IP.",
+["Defino asignación automática y centralizada.",
+"Indico UDP 67 servidor y UDP 68 cliente.",
+"Menciono máscara, gateway, DNS u otros parámetros del PDF."],D("3,12"));
+
+add(6,"D2","DORA: mensajes, emisor y difusión",
+"¿Qué secuencia y emisores recoge el esquema DORA?",
+"DISCOVER cliente → OFFER servidor → REQUEST cliente → ACK servidor.",
+["DISCOVER servidor → ACK cliente → OFFER cliente → REQUEST servidor.",
+"REQUEST servidor → RELEASE servidor → DNS cliente."],
+"DISCOVER solicita, OFFER ofrece, REQUEST acepta y ACK confirma la concesión. El PDF explicita DISCOVER por broadcast; también renovación unicast y reenganche mediante REQUEST broadcast. No detalla todos los casos de difusión de OFFER/ACK.",
+"Reconstruye DORA con emisor y función. Identifica qué difusión está documentada y qué detalles no puedes fijar universalmente con este PDF.",
+["Ordeno DISCOVER, OFFER, REQUEST y ACK.",
+"Indico correctamente cliente, servidor, cliente, servidor.",
+"Distingue difusión documentada de los detalles pendientes."],D("4,6,8–9"),
+"Falta desarrollar broadcast/unicast de todos los mensajes DORA y sus condiciones. No memorizar OFFER y ACK como siempre de un único tipo.");
+
+add(6,"D3","REQUEST y ACK con varios servidores",
+"¿Por qué no basta con recibir una oferta cuando hay varios servidores?",
+"El cliente debe confirmar su elección y el servidor confirmar la concesión.",
+["Todas las ofertas deben aplicarse simultáneamente.",
+"ACK sirve para instalar las claves SSH."],
+"Según los apuntes, REQUEST confirma que se aceptan los parámetros del servidor elegido y ACK confirma la concesión y el tiempo. Estos pasos evitan conflictos con varios servidores.",
+"Dos servidores ofrecen una dirección. Explica por qué el cliente no debe quedarse simplemente con todas las ofertas y qué aportan REQUEST y ACK.",
+["Distingo oferta de concesión confirmada.",
+"Relaciono REQUEST con aceptación o elección.",
+"Relaciono ACK con confirmación y lease time."],D("4"));
+
+add(6,"D4","Estados del cliente",
+"¿En qué estado tiene el cliente la configuración aplicada y una concesión activa?",
+"BOUND",
+["SELECTING significa que ya expiró toda concesión.",
+"INIT-REBOOT significa que el servidor cambia de puerto."],
+"INIT inicia la búsqueda; SELECTING selecciona; BOUND mantiene configuración aplicada; RENEWING renueva con el servidor; REBINDING busca cualquier servidor; INIT-REBOOT verifica una concesión recordada al reiniciar.",
+"Cuenta la vida de un cliente usando los seis estados exigidos. Incluye la rama de un reinicio con concesión recordada.",
+["Distingo INIT, SELECTING y BOUND.",
+"Distingo RENEWING y REBINDING.",
+"Incluyo INIT-REBOOT sin confundirlo con la búsqueda inicial completa."],D("6–10"));
+
+add(6,"D5","T1, T2 y T3",
+"Si T3 es 8 horas y se aplican las proporciones del PDF, ¿cuáles son T1 y T2?",
+"T1 = 4 horas; T2 = 7 horas.",
+["T1 = 7 horas; T2 = 4 horas.",
+"T1 = T2 = 8 horas."],
+"T1 = 0,5 × T3: renovación. T2 = 0,875 × T3: reenganche. T3: duración total. Si expira T3 sin renovar, se pierde la configuración y se vuelve a INIT.",
+"Para una concesión de 24 horas sin T1/T2 explícitos, calcula ambos y explica qué intenta el cliente en cada vencimiento.",
+["Obtengo T1 = 12 horas y T2 = 21 horas.",
+"Relaciono T1 con mismo servidor y T2 con cualquier servidor.",
+"Relaciono T3 sin renovación con pérdida de configuración e INIT."],D("7–9,19"));
+
+add(6,"D6","Renovación: ACK, NAK o silencio",
+"Durante RENEWING, ¿qué ocurre si no responde el servidor?",
+"El cliente continúa hasta T2; el silencio no equivale a un NAK.",
+["Pierde obligatoriamente la configuración en ese instante.",
+"Renueva para siempre sin límite."],
+"ACK permite volver a BOUND. NAK obliga a volver a INIT. Sin respuesta se sigue hasta T2; entonces se intenta reenganche, y T3 marca la expiración total si no se logra renovar.",
+"Describe tres ramas tras intentar renovar: ACK, NAK y ninguna respuesta. Continúa la tercera hasta T3.",
+["ACK: concesión confirmada y BOUND.",
+"NAK: regreso a INIT.",
+"Silencio: T2/REBINDING y, sin respuesta hasta T3, pérdida de configuración."],D("8–9"));
+
+add(6,"D7","INIT-REBOOT",
+"Un cliente recuerda su IP al reiniciar. ¿Qué mensaje envía según el PDF?",
+"DHCPREQUEST para confirmarla, sin repetir inicialmente todo DORA.",
+["Siempre DHCPRELEASE para renunciar antes de preguntar.",
+"Un DHCPOFFER dirigido al servidor."],
+"INIT-REBOOT confirma la concesión recordada con REQUEST. ACK lleva a BOUND; NAK, o falta de respuesta con concesión ya expirada, lleva a INIT y al proceso completo.",
+"Explica qué hace el cliente al reiniciar con una concesión recordada y separa ACK, NAK y ausencia de respuesta con concesión expirada.",
+["Comienzo por DHCPREQUEST.",
+"ACK conduce a BOUND.",
+"NAK o silencio con expiración conduce a INIT y DISCOVER."],D("10"));
+
+add(6,"D8","Ámbito, rango, concesión y reserva",
+"¿Qué es una reserva en el modelo de los apuntes?",
+"Una IP fija asociada a una MAC concreta.",
+["Todo el espacio de direcciones de Internet.",
+"El tiempo que tarda en ejecutarse ssh-keygen."],
+"Ámbito: agrupación administrativa de equipos de una subred. Rango: direcciones que se pueden conceder. Concesión: tiempo de asignación. Reserva: asociación fija con una MAC.",
+"Explica los cuatro conceptos con una misma red de ejemplo, sin llamar reserva al pool ni concesión a la subred.",
+["Distingo ámbito y rango.",
+"Defino tiempo de concesión.",
+"Relaciono reserva con IP y MAC concreta."],D("11"));
+
+add(6,"D9","Parámetros entregados por DHCP",
+"¿Cuál de estos conjuntos puede entregar DHCP según el PDF?",
+"IP, máscara, gateway, broadcast, DNS y otros parámetros de servicios.",
+["Solo la IP; el resto nunca puede enviarse.",
+"Claves privadas SSH de todos los administradores."],
+"Además de IP y máscara, se citan gateway, broadcast, MTU, DNS, dominio, NTP, SMTP y TFTP. DHCP centraliza más que la dirección.",
+"Un cliente tiene IP pero no sabe qué DNS usar. Explica por qué DHCP también puede centralizar eso y enumera cinco parámetros del material.",
+["Incluyo máscara y gateway.",
+"Incluyo DNS y broadcast.",
+"Añado dominio, MTU, NTP, SMTP o TFTP."],D("12"));
+
+// KEA: 41–48
+add(7,"K1","Servicios y archivos de Kea",
+"¿Qué servicio y archivo corresponden a DHCPv4?",
+"kea-dhcp4-server y /etc/kea/kea-dhcp4.conf",
+["kea-ctrl-agent y /etc/hosts.",
+"systemd-resolved y /etc/kea/authorized_keys."],
+"Servicios: kea-dhcp4-server, kea-dhcp6-server, kea-ctrl-agent y kea-dhcp-ddns-server. Archivos en /etc/kea/: kea-dhcp4.conf, kea-dhcp6.conf, kea-ctrl-agent.conf y kea-dhcp-ddns.conf.",
+"Relaciona IPv4, IPv6, agente de control y DNS dinámico con sus servicios y archivos.",
+["Relaciono DHCPv4 y DHCPv6 correctamente.",
+"Relaciono ctrl-agent con su archivo.",
+"Relaciono DDNS con kea-dhcp-ddns-server y kea-dhcp-ddns.conf."],D("15"));
+
+add(7,"K2","Estructura de kea-dhcp4.conf",
+"¿Qué objeto raíz utiliza la configuración IPv4 del ejemplo?",
+"Dhcp4",
+["NSS","authorized_keys"],
+"El JSON se organiza dentro de Dhcp4. interfaces-config selecciona interfaces; lease-database almacena concesiones; valid-lifetime marca duración; subnet4 contiene subredes y pools; option-data contiene opciones. renew-timer=T1 y rebind-timer=T2.",
+"Esboza el objeto raíz y explica interfaces-config, lease-database, valid-lifetime, subnet4, pools y option-data. Añade T1 y T2.",
+["Incluyo Dhcp4 e interfaces-config.",
+"Distingo base de concesiones y tiempos.",
+"Relaciono subnet4/pools/opciones y renew-timer/rebind-timer."],D("17–21"));
+
+add(7,"K3","Subred frente a pool",
+"¿Qué relación debe mantener el pool del ejemplo con la subred?",
+"Es un subconjunto de direcciones de la subred.",
+["Siempre contiene direcciones de cualquier otra red.",
+"Es el nombre del servidor DNS."],
+"subnet define la red completa en CIDR; pools contiene las direcciones concedibles. Dejar fuera direcciones permite planificar equipos con asignación fija sin tratarlos como candidatos ordinarios del pool; esta justificación aplica los conceptos de estática y rango del material.",
+"Compara subnet 172.22.0.0/16 con pool 172.22.0.5–172.22.17.254. Explica qué representa cada uno y por qué no son sinónimos.",
+["La subred es el espacio total definido por CIDR.",
+"El pool es un subconjunto concedible.",
+"Justifico reservar espacio de planificación para direcciones que no deban repartirse normalmente."],D("20")+"; "+C("21")+"; aplicación razonada"));
+
+add(7,"K4","Configurar un ámbito completo",
+"¿Dónde se declaran gateway, DNS y broadcast en el ejemplo Kea?",
+"En option-data, mediante opciones con name y data.",
+["En authorized_keys usando claves públicas.",
+"En la ruta del archivo CSV de concesiones."],
+"Ejemplo de estructura del ámbito:\nsubnet: 172.22.0.0/16\npool: 172.22.0.5 - 172.22.17.254\nrouters: 172.22.0.1\ndomain-name-servers: 172.22.0.1,192.168.0.1\nbroadcast-address: 172.22.255.255\nvalid-lifetime: 86400\nsubnet incorpora la máscara mediante CIDR; las opciones usan name/data.",
+"Redacta el fragmento JSON para esa subred y ese pool, con gateway, DNS, broadcast y duración de 86400 segundos. Identifica dónde queda representada la máscara.",
+["Incluyo subnet4, subnet y pools con los valores propuestos.",
+"Uso option-data con routers, domain-name-servers y broadcast-address.",
+"Incluyo valid-lifetime y explico /16 como máscara."],D("17,19–21"));
+
+add(7,"K5","Varios ámbitos",
+"¿Cómo permite el modelo de Kea representar varias redes?",
+"Con varias entradas en la lista subnet4, cada una con su subnet, pools y opciones.",
+["Mezclando direcciones ajenas dentro de un único pool sin subred.",
+"Creando varias claves privadas en /etc/kea/."],
+"subnet4 es una lista de subredes gestionadas. Cada entrada define su red, uno o varios pools y puede tener sus propias option-data. interfaces-config determina interfaces de escucha.",
+"Esboza dos entradas subnet4 para dos redes distintas. Explica qué debe corresponder a cada red y qué revisarías en interfaces-config.",
+["Creo dos objetos de subred dentro de la lista.",
+"Mantengo cada pool dentro de su red.",
+"Distingo opciones por red e interfaces de escucha."],D("18,20–21"));
+
+add(7,"K6","Reserva y destino DNAT estable",
+"¿Por qué interesa que el servidor publicado reciba siempre la misma IP?",
+"Porque la regla DNAT señala una dirección interna concreta.",
+["Porque DNAT busca automáticamente cualquier nueva IP por hostname.",
+"Porque una reserva cambia el puerto del servidor a UDP 67."],
+"Una reserva asocia una IP a una MAC. DNAT redirige a una dirección interna concreta. Por tanto, mantener estable esa dirección evita que la regla apunte a otro destino. El PDF no muestra la sintaxis JSON de una reserva Kea.",
+"Justifica la relación reserva–DNAT e indica los datos necesarios para identificar la máquina y la IP. Señala qué sintaxis falta en los apuntes.",
+["Relaciono la reserva con MAC e IP estable.",
+"Explico el destino concreto de la regla DNAT.",
+"No doy por aprendida la sintaxis JSON de reservas que falta."],D("11")+"; "+C("47")+"; aplicación razonada",
+"Falta el ejemplo de configuración de reservas Kea y sus condiciones. Se practica el concepto y la relación con DNAT, no se certifica su implementación.");
+
+add(7,"K7","Concesiones y registros",
+"¿Qué combinación coincide con el backend memfile del PDF?",
+"/var/lib/kea/kea-leases4.csv y journalctl -u kea-dhcp4-server",
+["/etc/hostname y ssh-copy-id.",
+"/etc/hosts y hostname -f como registro de concesiones."],
+"memfile almacena concesiones en un CSV; persist:true permite conservarlas tras reinicios. Se registran IP, MAC, hostname, tiempos y estado. journalctl -u kea-dhcp4-server consulta los registros del servicio.",
+"Necesitas averiguar qué cliente obtuvo una IP y si el servidor registró errores. Indica dónde buscarías cada cosa y qué datos relacionarías.",
+["Identifico el CSV de concesiones.",
+"Uso journalctl -u kea-dhcp4-server.",
+"Relaciono IP/MAC/tiempos y distingo concesión de registro del servicio."],D("16,18,22"));
+
+add(7,"K8","Captura e identificación con tcpdump",
+"En una traza didáctica, ¿qué mensaje confirma finalmente la concesión?",
+"DHCPACK",
+["DHCPOFFER ya equivale siempre a concesión confirmada.",
+"DHCPDISCOVER es la confirmación final del servidor."],
+"Puedes identificar DISCOVER, OFFER, REQUEST y ACK mediante sus funciones y emisores. La guía exige capturarlos con tcpdump, pero el PDF no incluye comando ni captura comentada.",
+"Interpreta una secuencia cliente DISCOVER / servidor OFFER / cliente REQUEST / servidor ACK. Explica qué necesitarías de la práctica para obtenerla con tcpdump.",
+["Identifico solicitud, oferta, aceptación y confirmación.",
+"Distingo emisor cliente/servidor.",
+"Identifico la falta de comando y captura real documentados."],D("3–4")+"; "+G,
+"Faltan sintaxis de tcpdump, interfaz/filtro y lectura de una captura real. No se certifica la competencia de captura.");
+
+// DIAGNÓSTICO: 49–52
+add(8,"X1","Apagar DHCP con una concesión activa",
+"Según el ciclo de concesión, ¿apagar el servidor implica perder la IP inmediatamente?",
+"No: la concesión activa sigue su ciclo; importan T1, T2 y T3.",
+["Sí, todos los clientes borran instantáneamente la IP.",
+"No, la IP queda concedida para siempre."],
+"Aplicando los estados del PDF: un cliente con concesión activa intenta renovar al llegar T1, reenganchar al llegar T2 y pierde la configuración si expira T3 sin éxito. Eso no sustituye una comprobación real en Linux y Windows.",
+"Predice la evolución al apagar DHCP y diseña una tabla de observaciones antes de T1, entre T1/T2 y tras T3. Distingue predicción de prueba realizada.",
+["No afirmo pérdida instantánea.",
+"Describo T1, T2 y T3 sin respuesta.",
+"Distingo predicción del protocolo de evidencia observada en cada sistema."],D("7–9")+"; aplicación razonada; "+G,
+"Falta la práctica de comprobación específica en clientes Linux y Windows: comandos, salidas y diferencias observadas.");
+
+add(8,"X2","Cambiar configuración con concesiones activas",
+"¿Qué conclusión es prudente al cambiar opciones del servidor?",
+"No dar por hecho que todos los clientes ya usan el cambio: comprobar concesión y renovación.",
+["Cada cliente recibe automáticamente una nueva configuración por editar el archivo.",
+"La concesión activa deja de tener temporizadores."],
+"El modelo de los apuntes aplica configuración mediante intercambios DHCP y renovación. Como aplicación razonada, editar el servidor no demuestra por sí solo qué está usando un cliente activo: hay que observarlo y relacionarlo con su concesión.",
+"Se cambia el DNS configurado en Kea. Explica qué observarías en los clientes antes y después de renovar y por qué no basta con leer el JSON.",
+["Distingo configuración del servidor de configuración activa del cliente.",
+"Relaciono actualización con intercambio DHCP o renovación.",
+"Propongo comparar valores y tiempos, sin inventar resultados observados."],D("7–9,21")+"; aplicación razonada; "+G,
+"Faltan procedimientos y resultados de la práctica sobre cambios con concesión activa. La reacción concreta depende del cambio que se haya realizado.");
+
+add(8,"X3","Interfaz pública DHCP y una ruta por defecto",
+"¿Qué comprobación de la guía evita dar por bueno un router con rutas por defecto duplicadas?",
+"Revisar ip r y verificar que quede una sola ruta por defecto.",
+["Revisar solo el hostname.",
+"Contar las claves públicas de authorized_keys."],
+"La guía exige interfaz pública por DHCP y una única ruta por defecto. El PDF aporta iface eth0 inet dhcp como patrón de configuración y ip route para consultar rutas, pero no desarrolla toda la práctica de eliminación de rutas duplicadas según gestor.",
+"Escribe la configuración DHCP de la interfaz pública con ifupdown y explica qué buscarías en ip r. Indica por qué faltaría revisar el origen de una ruta duplicada.",
+["Uso auto e iface inet dhcp para la interfaz pública.",
+"Compruebo ip r y una sola ruta por defecto.",
+"No confundo ver una ruta activa con haber corregido su origen persistente."],C("23–24")+"; "+G,
+"Falta el escenario concreto y la corrección persistente de rutas duplicadas según el gestor de red.");
+
+add(8,"X4","Comprobar el escenario tras reiniciar",
+"¿Qué prueba demuestra mejor la persistencia del escenario?",
+"Reiniciar y comprobar direcciones, rutas, resolución, reenvío, NAT y servicio DHCP.",
+["Que una orden funcionara una vez antes de reiniciar.",
+"Que el README tenga muchas líneas."],
+"Los apuntes separan cambios temporales y persistentes: hostname, archivos de red, forwarding en sysctl.d, reglas guardadas y concesiones persistentes. La comprobación final debe volver a revisar el estado y los servicios tras arrancar.",
+"Prepara una lista de verificación después del reinicio del router, incluyendo salida de clientes, servicio publicado y DHCP. Diferencia configuración guardada de funcionamiento comprobado.",
+["Reviso IP, ruta por defecto, DNS y nombres.",
+"Reviso forwarding, reglas cargadas, salida y publicación DNAT.",
+"Reviso servicio Kea, registros y concesiones, y anoto evidencias."],C("17–18,23,37,43,49")+"; "+D("16,18")+"; aplicación razonada"));
+
+/* VALIDACIÓN DEL BANCO */
+const EXPECTED=[7,4,3,5,5,7,9,8,4];
+const problems=[];
+if(DATA.length!==52)problems.push("El banco no tiene 52 objetivos.");
+if(new Set(DATA.map(x=>x.id)).size!==DATA.length)problems.push("Hay IDs duplicados.");
+ROOMS.forEach((_,i)=>{
+  if(DATA.filter(x=>x.room===i).length!==EXPECTED[i])
+    problems.push("Cantidad incorrecta en sala "+(i+1));
+});
+DATA.forEach(x=>{
+  if(!x.question||!x.challenge||!x.why||!x.answer||x.wrong.length!==2||x.rubric.length!==3)
+    problems.push("Contenido incompleto: "+x.id);
+  if(new Set([x.answer,...x.wrong]).size!==3)
+    problems.push("Opciones duplicadas: "+x.id);
+});
+if(problems.length)throw Error(problems.join("\n"));
+
+/* ESTADO */
+const KEY="rootquest-servicios1-v1";
+const $=s=>document.querySelector(s);
+const app=$("#app");
+const modal=$("#modal");
+const blank=()=>({
+  version:1,hp:5,xp:0,potions:3,marks:{},bosses:[],
+  room:0,sound:false,history:[],started:Date.now()
+});
+let storageOK=true;
+let state=blank();
+try{
+  const raw=localStorage.getItem(KEY);
+  if(raw)state=validateSave(JSON.parse(raw));
+}catch(e){storageOK=false}
+let active=null,run=null,currentRoom=state.room,toastTimer,audio;
+let screen="map";
+
+function validateSave(s){
+  if(!s||s.version!==1||!s.marks||typeof s.marks!=="object"||Array.isArray(s.marks))
+    throw Error("Formato de partida no reconocido.");
+  const out=blank();
+  const integer=(n,a,b)=>Number.isInteger(n)&&n>=a&&n<=b;
+  if(!integer(s.hp,0,5)||!integer(s.xp,0,100000000)||!integer(s.potions,0,10000))
+    throw Error("Valores de partida inválidos.");
+  out.hp=s.hp;out.xp=s.xp;out.potions=s.potions;
+  out.room=integer(s.room,0,8)?s.room:0;
+  out.sound=s.sound===true;
+  out.started=Number.isFinite(s.started)?s.started:Date.now();
+  out.bosses=Array.isArray(s.bosses)?
+    [...new Set(s.bosses.filter(n=>integer(n,0,8)))]:[];
+  DATA.forEach(x=>{
+    const m=s.marks[x.id];
+    if(m&&typeof m==="object"){
+      out.marks[x.id]={
+        quiz:m.quiz===true,recall:m.recall===true,
+        tries:integer(m.tries,0,100000)?m.tries:0,
+        wrong:integer(m.wrong,0,100000)?m.wrong:0,
+        seen:m.seen===true
+      };
+    }
+  });
+  out.history=Array.isArray(s.history)?
+    s.history.filter(h=>h&&typeof h.id==="string"&&DATA.some(x=>x.id===h.id))
+      .slice(-200).map(h=>({id:h.id,ok:h.ok===true,mode:String(h.mode).slice(0,12),time:Number(h.time)||0})):[];
+  return out;
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(state));storageOK=true}
+  catch(e){storageOK=false;toast("No se pudo guardar. Exporta la partida desde ⚙️.")}
+}
+function mark(id){
+  return state.marks[id]||(state.marks[id]={quiz:false,recall:false,tries:0,wrong:0,seen:false});
+}
+function completed(x){const m=mark(x.id);return m.quiz&&m.recall}
+function roomData(i){return DATA.filter(x=>x.room===i)}
+function roomReady(i){return roomData(i).every(completed)}
+function fullCount(){return DATA.filter(x=>completed(x)&&!x.gap).length}
+function stepCount(){return DATA.reduce((n,x)=>n+Number(mark(x.id).quiz)+Number(mark(x.id).recall),0)}
+function shuffle(a){
+  const b=[...a];
+  for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}
+  return b;
+}
+function el(tag,text,cls){
+  const n=document.createElement(tag);if(text!==undefined)n.textContent=text;
+  if(cls)n.className=cls;return n;
+}
+function button(text,fn,cls=""){
+  const b=el("button",text,cls);b.type="button";b.onclick=fn;return b;
+}
+function toast(t){
+  clearTimeout(toastTimer);$("#toast").textContent=t;$("#toast").classList.remove("hidden");
+  toastTimer=setTimeout(()=>$("#toast").classList.add("hidden"),3500);
+}
+function closeModal(){if(modal.open)modal.close()}
+function openModal(title){
+  closeModal();modal.replaceChildren();
+  const top=el("div",undefined,"row");
+  top.append(el("h2",title),button("Cerrar ✕",closeModal));
+  modal.append(top);modal.showModal();
+}
+function warnGap(x,parent){
+  if(!x.gap)return;
+  const d=el("div",undefined,"panel notice");
+  d.append(el("strong","⚠️ Cobertura documental parcial"),
+    el("p",x.gap),el("small","No se contará como objetivo completamente cubierto aunque superes sus ejercicios."));
+  parent.append(d);
+}
+function meter(value,max,label){
+  const d=el("div");d.append(el("small",label));
+  const p=document.createElement("progress");p.max=max;p.value=value;p.setAttribute("aria-label",label);
+  d.append(p);return d;
+}
+function beep(ok){
+  if(!state.sound)return;
+  try{
+    audio=audio||new (window.AudioContext||window.webkitAudioContext)();
+    audio.resume();
+    const o=audio.createOscillator(),g=audio.createGain();
+    o.type=ok?"sine":"triangle";o.frequency.value=ok?620:130;
+    g.gain.setValueAtTime(.08,audio.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.22);
+    o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+.23);
+  }catch(e){}
+}
+function burst(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  for(let i=0;i<28;i++){
+    const p=el("i",undefined,"confetti");
+    p.style.left=Math.random()*100+"vw";
+    p.style.background=["#6ee7ff","#ffdb86","#baa0ff","#80edb0"][i%4];
+    p.style.animationDelay=Math.random()*.4+"s";
+    document.body.append(p);setTimeout(()=>p.remove(),2800);
+  }
+}
+function titleStatus(x){
+  if(completed(x))return x.gap?"🟨 Practicado · falta material":"🟩 Practicado en 2 formas";
+  const m=mark(x.id);
+  return m.quiz||m.recall?"🟦 En progreso":m.seen?"🟧 Revisar":"⬜ Pendiente";
+}
+function hud(){
+  const h=el("div",undefined,"hud");
+  const life=el("div");life.append(el("small","INTEGRIDAD DEL ADMINISTRADOR"));
+  const hearts=el("strong","♥".repeat(state.hp)+"♡".repeat(5-state.hp),"hearts");
+  hearts.setAttribute("aria-label",state.hp+" de 5 vidas");life.append(hearts);
+  const xp=el("div");xp.append(el("small","EXPERIENCIA"),
+    el("strong",state.xp+" XP · "+state.bosses.length+"/9 jefes"));
+  h.append(life,xp,meter(stepCount(),104,"Práctica global: "+stepCount()+"/104"));
+  return h;
+}
+function confirmLeave(fn){
+  if(active&&!active.resolved&&!confirm("¿Salir del reto? No perderás el progreso ya guardado."))return;
+  active=null;run=null;fn();
+}
+
+/* MAPA Y SALAS */
+function showMap(){
+  screen="map";active=null;run=null;app.replaceChildren();
+  const intro=el("section",undefined,"panel");
+  intro.append(hud(),el("h2","🗺️ El centro de datos está en tus manos"),
+    el("p","Elige una sala. Cada terminal tiene una prueba de reconocimiento y otra de explicación. Completa ambas para desbloquear el jefe de esa sala."),
+    el("p","Los errores hacen daño y reaparecen. Con 0 vidas vuelves al refugio, pero conservas lo aprendido. Los jefes mezclan 3 retos abiertos: no se vencen memorizando la posición de una opción."));
+  const actions=el("div",undefined,"row");
+  actions.append(button("▶ Continuar por donde falta",resume,"primary"),
+    button("🩹 Repasar errores",startReview),
+    button("🧪 Simulacro mixto",startExam));
+  intro.append(actions);
+  if(!storageOK)intro.append(el("p","⚠️ Guardado local no disponible o partida anterior inválida. Usa exportación manual.","badge partial"));
+  app.append(intro);
+  const g=el("div",undefined,"grid");
+  ROOMS.forEach((r,i)=>{
+    const xs=roomData(i),done=xs.filter(completed).length;
+    const card=el("article",undefined,"card"+(state.bosses.includes(i)?" complete":""));
+    card.append(el("span","SALA "+(i+1),"badge"),
+      el("h3",r[0]+" "+r[1]),el("p",r[4],"muted"),
+      meter(done,xs.length,done+"/"+xs.length+" terminales practicados"),
+      el("p",state.bosses.includes(i)?"🏆 Jefe vencido":roomReady(i)?"👹 Jefe disponible":"🔒 Jefe: completa los terminales"));
+    const gaps=xs.filter(x=>x.gap).length;
+    if(gaps)card.append(el("small",gaps+" objetivo(s) con material pendiente."));
+    card.append(el("p"),button("Entrar",()=>showRoom(i),"primary"));
+    g.append(card);
+  });
+  app.append(g);
+  const note=el("section",undefined,"panel notice");
+  note.append(el("h3","Cobertura transparente"),
+    el("p","52 objetivos registrados · 104 ejercicios base. "+DATA.filter(x=>x.gap).length+
+      " objetivos tienen lagunas documentales señaladas. Completar el juego no demuestra por sí solo dominio práctico real."),
+    el("p","Objetivos con ambas formas superadas y sin laguna documental: "+fullCount()+"/52."),
+    button("Auditar objetivo por objetivo",showAudit));
+  app.append(note);
+}
+function resume(){
+  if(state.hp===0){showRecovery();return}
+  const x=DATA.find(x=>!completed(x));
+  if(x)showRoom(x.room);
+  else{
+    const i=ROOMS.findIndex((_,i)=>!state.bosses.includes(i));
+    if(i>=0)showRoom(i);else showVictory();
+  }
+}
+function showRoom(i){
+  screen="room";active=null;run=null;currentRoom=i;state.room=i;save();
+  app.replaceChildren();
+  const r=ROOMS[i],xs=roomData(i);
+  const p=el("section",undefined,"panel");
+  p.append(hud(),el("div","SALA "+(i+1)+" / 9","brand"),
+    el("h2",r[0]+" "+r[1]),el("p",r[4]));
+  const sc=el("div",undefined,"scene");
+  const hero=el("div","🧑‍💻","actor hero");hero.append(el("label","TÚ"));
+  const enemy=el("div",r[3],"actor enemy");enemy.append(el("label",r[2]));
+  const fraction=xs.filter(completed).length/xs.length;
+  hero.style.left=(12+fraction*42)+"%";
+  sc.append(hero,enemy);p.append(sc);
+  const route=el("div",undefined,"route");
+  xs.forEach((x,j)=>{
+    const b=button(String(j+1),()=>openObjective(x.id),
+      "node"+(completed(x)?" done":""));
+    b.title=x.title;route.append(b);
+  });
+  p.append(route);
+  const actions=el("div",undefined,"row");
+  actions.append(button("⚔️ Siguiente terminal",()=>{
+    const x=xs.find(x=>!completed(x))||xs[0];openObjective(x.id)
+  },"primary"));
+  const boss=button("👹 Desafiar a "+r[2],()=>startBoss(i),"danger");
+  boss.disabled=!roomReady(i);actions.append(boss);
+  actions.append(button("🧪 Poción ("+state.potions+")",()=>{
+    if(state.hp===5)return toast("Ya tienes la vida completa.");
+    if(!state.potions)return toast("No quedan pociones. Puedes descansar en el refugio.");
+    state.potions--;state.hp=Math.min(5,state.hp+2);save();beep(true);showRoom(i);
+  }),button("🏕️ Descansar",()=>{state.hp=5;save();toast("Vida restaurada; no cambia el progreso.");showRoom(i)}));
+  p.append(actions);app.append(p);
+  const list=el("div",undefined,"grid");
+  xs.forEach(x=>{
+    const c=el("article",undefined,"card");
+    c.append(el("span",x.id,"badge"),el("h3",x.title),
+      el("p",titleStatus(x)),el("small",x.source));
+    if(x.gap)c.append(el("p","⚠️ Hay una parte no desarrollada en los PDF.","badge partial"));
+    c.append(el("p"),button("Reconocimiento",()=>launch(x.id,"quiz")),
+      document.createTextNode(" "),
+      button("Explicar / aplicar",()=>launch(x.id,"recall")));
+    list.append(c);
+  });
+  app.append(list);
+}
+function openObjective(id){
+  const m=mark(id);launch(id,!m.quiz?"quiz":"recall");
+}
+
+/* COMBATE Y PREGUNTAS */
+function launch(id,mode){
+  if(state.hp===0){showRecovery();return}
+  const x=DATA.find(x=>x.id===id);
+  if(!x)return;
+  currentRoom=x.room;state.room=x.room;
+  mark(id).seen=true;save();screen="question";
+  active={id,mode,resolved:false,revealed:false,hint:false,draft:""};
+  renderQuestion();
+}
+function renderQuestion(){
+  const x=DATA.find(x=>x.id===active.id),a=active,r=ROOMS[x.room];
+  app.replaceChildren();
+  const panel=el("section",undefined,"panel");
+  panel.append(hud());
+  if(run){
+    const label=run.kind==="boss"?"JEFE":run.kind==="exam"?"SIMULACRO":"REPASO";
+    panel.append(el("div",label+" · reto "+(run.index+1)+"/"+run.queue.length,"brand"));
+    if(run.kind==="boss")
+      panel.append(meter(run.correct,run.queue.length,"Escudo roto: "+run.correct+"/"+run.queue.length));
+  }else panel.append(el("div",r[0]+" "+r[1]+" · "+x.id,"brand"));
+  const scene=el("div",undefined,"scene");scene.id="fightScene";
+  const hero=el("div","🧑‍💻","actor hero");hero.append(el("label","ADMIN"));
+  const enemy=el("div",run?.kind==="boss"?r[3]:"🛰️","actor enemy");
+  enemy.append(el("label",run?.kind==="boss"?r[2]:"TERMINAL "+x.id));
+  scene.append(hero,enemy,el("div",undefined,"orb"));panel.append(scene);
+  panel.append(el("h2",x.title),
+    el("span",a.mode==="quiz"?"A · Reconocimiento":"B · Explicación y aplicación","badge"),
+    el("p",a.mode==="quiz"?x.question:x.challenge,"question"));
+  warnGap(x,panel);
+  if(a.mode==="quiz"){
+    const opts=el("div",undefined,"options");
+    shuffle([x.answer,...x.wrong]).forEach((text,i)=>{
+      const b=button(String.fromCharCode(65+i)+" · "+text,()=>{
+        if(active!==a||a.resolved)return;
+        opts.querySelectorAll("button").forEach(z=>z.disabled=true);
+        b.classList.add(text===x.answer?"correct":"wrong");
+        [...opts.children].forEach(z=>{
+          if(z.dataset.answer==="yes")z.classList.add("correct");
+        });
+        resolveAnswer(text===x.answer,panel);
+      },"option");
+      b.dataset.answer=text===x.answer?"yes":"no";opts.append(b);
+    });
+    panel.append(opts);
+  }else{
+    panel.append(el("p","Escribe tu respuesta antes de revelar la solución. Después compárala con los tres criterios. La evaluación abierta es tuya, no de una IA oculta.","muted"));
+    const text=document.createElement("textarea");text.placeholder="Explica el porqué, no solo el nombre del comando…";
+    text.setAttribute("aria-label","Tu respuesta");text.value=a.draft;
+    text.oninput=()=>a.draft=text.value;
+    panel.append(text);
+    const reveal=button("📖 Comparar con la solución",()=>{
+      if(active!==a||a.revealed)return;
+      if(!text.value.trim())return toast("Escribe un intento o utiliza «No lo sé».");
+      a.revealed=true;text.readOnly=true;reveal.disabled=true;
+      revealRecall(panel,x);
+    },"primary");
+    panel.append(reveal,document.createTextNode(" "),
+      button("No lo sé · aprender la solución",()=>{
+        if(a.resolved)return;
+        panel.querySelectorAll("button").forEach(b=>b.disabled=true);
+        text.readOnly=true;resolveAnswer(false,panel);
+      }));
+  }
+  const tools=el("div",undefined,"row");tools.style.marginTop="15px";
+  tools.append(button("💡 Pista: ver criterios",()=>{
+    if(a.resolved)return;
+    a.hint=true;
+    toast(x.rubric[0]+" · Con pista no se acredita la modalidad.");
+  }),button("← Volver a la sala",()=>confirmLeave(()=>showRoom(x.room))));
+  panel.append(tools);app.append(panel);
+  app.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function revealRecall(panel,x){
+  const box=el("section",undefined,"feedback");
+  box.append(el("h3","Solución razonada"),el("div",x.why,"model"),
+    el("p","Marca solo lo que ya aparecía correctamente en tu respuesta antes de mirar."),
+    el("small",x.source));
+  const checks=[];
+  x.rubric.forEach(t=>{
+    const l=el("label",undefined,"rubric");
+    const c=document.createElement("input");c.type="checkbox";
+    checks.push(c);l.append(c,document.createTextNode(t));box.append(l);
+  });
+  box.append(button("Evaluar mi respuesta",()=>{
+    if(active.resolved)return;
+    const n=checks.filter(c=>c.checked).length;
+    box.querySelectorAll("button,input").forEach(z=>z.disabled=true);
+    resolveAnswer(n===checks.length,panel,n);
+  },"primary"));
+  panel.append(box);box.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function resolveAnswer(ok,panel,rubricCount=null){
+  const a=active;if(!a||a.resolved)return;a.resolved=true;
+  const x=DATA.find(x=>x.id===a.id),m=mark(x.id);
+  m.tries++;
+  const previous=m[a.mode];
+  if(ok&&!a.hint)m[a.mode]=true;
+  if(!ok){
+    m.wrong++;m[a.mode]=false;
+    state.hp=Math.max(0,state.hp-1);
+  }
+  const gain=ok?(a.hint?3:previous?3:10):0;
+  state.xp+=gain;
+  state.history.push({id:x.id,ok,mode:a.mode,time:Date.now()});
+  state.history=state.history.slice(-200);
+  if(run){if(ok&&!a.hint)run.correct++;else run.missed.push(x.id)}
+  save();beep(ok);
+  const scene=$("#fightScene");
+  scene.classList.add(ok?"attack":"hurt");
+  const floating=el("div",ok?"+"+gain+" XP":"−1 VIDA","floatText");scene.append(floating);
+  const h=panel.querySelector(".hud");if(h)h.replaceWith(hud());
+  panel.querySelectorAll(".options button").forEach(b=>b.disabled=true);
+  const f=el("section",undefined,"feedback "+(ok?"good":"bad"));
+  f.setAttribute("aria-live","polite");
+  f.append(el("h3",ok?"⚡ Impacto correcto":"🩹 El terminal contraataca"));
+  if(a.mode==="recall")
+    f.append(el("p","Resultado autoevaluado"+(rubricCount===null?"":": "+rubricCount+"/3 criterios")+"."));
+  if(a.hint&&ok)f.append(el("p","Has usado una pista: ganas práctica, pero debes repetir sin ayuda para acreditar esta modalidad."));
+  f.append(el("strong","Respuesta de reconocimiento:"),el("div",x.answer,"model"),
+    el("strong","Por qué:"),el("div",x.why,"model"),el("small",x.source));
+  if(!ok)f.append(el("p","No pierdes XP ni el resto del progreso. Esta modalidad vuelve a quedar pendiente. El cuaderno recuerda el error."));
+  if(x.gap)f.append(el("p","⚠️ Sigue pendiente: "+x.gap));
+  const acts=el("div",undefined,"row");
+  acts.style.marginTop="15px";
+  acts.append(button(state.hp===0?"🏕️ Volver al refugio":
+    run?"Continuar desafío →":ok?"Siguiente paso →":"Reintentar →",()=>afterAnswer(ok),"primary"));
+  if(!run)acts.append(button("🗺️ Sala",()=>{active=null;showRoom(x.room)}));
+  f.append(acts);panel.append(f);
+  f.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function afterAnswer(ok){
+  if(state.hp===0){run=null;active=null;showRecovery();return}
+  const old=active;
+  if(run){
+    run.index++;
+    if(run.index>=run.queue.length){finishRun();return}
+    const next=run.queue[run.index];launch(next.id,next.mode);return;
+  }
+  const x=DATA.find(x=>x.id===old.id);
+  if(!ok||old.hint){launch(x.id,old.mode);return}
+  if(!completed(x)){openObjective(x.id);return}
+  const next=roomData(x.room).find(y=>!completed(y));
+  if(next)openObjective(next.id);
+  else{burst();showRoom(x.room);toast("¡Todos los terminales de la sala practicados! Jefe desbloqueado.");}
+}
+
+/* JEFES, REPASO Y SIMULACRO */
+function startBoss(i){
+  if(!roomReady(i))return toast("Completa las dos modalidades de cada terminal.");
+  if(state.hp===0)return showRecovery();
+  run={kind:"boss",room:i,index:0,correct:0,missed:[],
+    queue:shuffle(roomData(i)).slice(0,3).map(x=>({id:x.id,mode:"recall"}))};
+  launch(run.queue[0].id,"recall");
+}
+function startReview(){
+  if(state.hp===0)return showRecovery();
+  const xs=DATA.filter(x=>mark(x.id).wrong>0&&!completed(x))
+    .sort((a,b)=>mark(b.id).wrong-mark(a.id).wrong);
+  if(!xs.length)return toast("No hay errores pendientes. Puedes hacer el simulacro.");
+  run={kind:"review",index:0,correct:0,missed:[],
+    queue:xs.slice(0,10).map(x=>({id:x.id,mode:mark(x.id).quiz?"recall":"quiz"}))};
+  const q=run.queue[0];launch(q.id,q.mode);
+}
+function startExam(){
+  if(state.hp===0)return showRecovery();
+  const queue=shuffle(ROOMS.flatMap((_,i)=>
+    shuffle(roomData(i)).slice(0,2).map((x,j)=>({id:x.id,mode:j?"recall":"quiz"}))));
+  run={kind:"exam",index:0,correct:0,missed:[],queue};
+  launch(queue[0].id,queue[0].mode);
+}
+function finishRun(){
+  const result=run;run=null;active=null;screen="results";
+  app.replaceChildren();
+  const p=el("section",undefined,"panel");
+  const all=result.correct===result.queue.length;
+  if(result.kind==="boss"&&all){
+    if(!state.bosses.includes(result.room)){
+      state.bosses.push(result.room);state.xp+=50;state.potions++;
+      state.hp=Math.min(5,state.hp+1);
+    }
+    save();burst();
+  }
+  p.append(hud(),el("h2",
+    result.kind==="boss"?(all?"🏆 Jefe derrotado":"👹 El jefe resiste"):
+    result.kind==="exam"?"📊 Simulacro terminado":"🩹 Repaso terminado"),
+    el("p",result.correct+"/"+result.queue.length+" respuestas superadas sin pista."));
+  if(result.kind==="boss"){
+    p.append(el("p",all?
+      "Sala sellada. La primera victoria concede 50 XP, una poción y una vida.":
+      "Necesitas las tres respuestas completas. Los fallos vuelven a los terminales pendientes."));
+  }
+  p.append(el("p","Las respuestas abiertas son autoevaluadas. Las lagunas de documentación no desaparecen al vencer a un jefe."));
+  if(result.missed.length){
+    p.append(el("h3","Para repasar"));
+    [...new Set(result.missed)].forEach(id=>{
+      const x=DATA.find(x=>x.id===id);
+      p.append(button(id+" · "+x.title,()=>{run=null;openObjective(id)}),el("p"));
+    });
+  }
+  p.append(button("Volver a las salas",showMap,"primary"));
+  if(state.bosses.length===9)p.append(button("🏁 Balance final",showVictory));
+  app.append(p);
+}
+function showRecovery(){
+  active=null;run=null;screen="recovery";app.replaceChildren();
+  const p=el("section",undefined,"panel");
+  p.append(el("h2","🏕️ Has vuelto al refugio"),
+    el("p","El sistema te ha expulsado del combate, no del aprendizaje. Conservas XP, jefes vencidos y objetivos ya practicados."),
+    el("p","Revisa el cuaderno antes de volver. No hay castigo de tiempo ni límite de intentos."),
+    button("📚 Revisar errores",showNotes),
+    document.createTextNode(" "),
+    button("❤️ Recuperar 5 vidas y volver",()=>{
+      state.hp=5;save();showRoom(currentRoom);
+    },"primary"));
+  app.append(p);
+}
+function showVictory(){
+  screen="victory";app.replaceChildren();burst();
+  const p=el("section",undefined,"panel");
+  p.append(hud(),el("h2","🏁 Centro de datos reconstruido"),
+    el("p","Jefes vencidos: "+state.bosses.length+"/9."),
+    el("p","Práctica de modalidades: "+stepCount()+"/104."),
+    el("p","Objetivos con dos modalidades y sin laguna documental: "+fullCount()+"/52."),
+    el("p","El logro del juego no equivale a un certificado. Antes del examen revisa las lagunas, practica los comandos y explica los procesos sin opciones."),
+    button("Auditoría final",showAudit,"primary"),document.createTextNode(" "),
+    button("Simulacro",startExam),document.createTextNode(" "),
+    button("Salas",showMap));
+  app.append(p);
+}
+
+/* AUDITORÍA, CUADERNO Y GUARDADO */
+function showAudit(){
+  openModal("📋 Matriz de cobertura · 52 objetivos");
+  modal.append(el("p","Cada objetivo tiene reconocimiento y una variante de aplicación/explicación. El estado verde significa práctica superada, no una evaluación externa. Amarillo: falta documentación."),
+    el("p","Autocomprobación del banco: 52 IDs únicos, distribución 7/4/3/5/5/7/9/8/4, dos modalidades por objetivo y tres criterios por respuesta abierta."));
+  const search=document.createElement("input");
+  search.type="search";search.className="search";search.placeholder="Buscar SSH, reservas, Windows, T1…";
+  search.setAttribute("aria-label","Filtrar objetivos");
+  modal.append(search);
+  const holder=el("div");modal.append(holder);
+  const paint=()=>{
+    holder.replaceChildren();
+    const term=search.value.toLocaleLowerCase();
+    DATA.filter(x=>[x.id,x.title,x.challenge,x.gap].join(" ").toLocaleLowerCase().includes(term))
+      .forEach(x=>{
+        const d=el("article",undefined,"auditItem"),m=mark(x.id);
+        d.append(el("strong",x.id+" · "+x.title),
+          el("p",titleStatus(x)),
+          el("small","Reconocimiento: "+(m.quiz?"✓":"pendiente")+
+            " · Aplicación: "+(m.recall?"✓ autoevaluado":"pendiente")),
+          el("p","Variante: "+x.challenge),
+          el("small",x.source));
+        if(x.gap)d.append(el("p","⚠️ "+x.gap,"badge partial"));
+        d.append(el("p"),button("Practicar",()=>{
+          if(active&&!active.resolved&&!confirm("¿Abandonar el intento actual?"))return;
+          closeModal();run=null;openObjective(x.id);
+        }));
+        holder.append(d);
+      });
+  };search.oninput=paint;paint();
+}
+function showNotes(){
+  openModal("📚 Cuaderno de recuperación");
+  modal.append(el("p","Aquí puedes estudiar las soluciones. Consultar el cuaderno no acredita ningún objetivo."));
+  const errs=DATA.filter(x=>mark(x.id).wrong>0).sort((a,b)=>mark(b.id).wrong-mark(a.id).wrong);
+  modal.append(el("h3","Errores registrados: "+errs.reduce((n,x)=>n+mark(x.id).wrong,0)));
+  const order=[...errs,...DATA.filter(x=>!errs.includes(x))];
+  order.forEach(x=>{
+    const d=document.createElement("details");
+    d.append(el("summary",x.id+" · "+x.title+
+      (mark(x.id).wrong?" · "+mark(x.id).wrong+" fallo(s)":"")),
+      el("div",x.why,"model"),el("small",x.source));
+    x.rubric.forEach(t=>d.append(el("p","✓ "+t)));
+    if(x.gap)d.append(el("p","⚠️ Pendiente: "+x.gap));
+    modal.append(d);
+  });
+}
+function download(name,text,type="application/json"){
+  const blob=new Blob([text],{type});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download=name;document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),30000);
+}
+function showSettings(){
+  openModal("⚙️ Partida y privacidad");
+  modal.append(el("p","La partida se guarda en este navegador cuando localStorage está disponible. No se sincroniza con GitHub ni se envía a un servidor."),
+    el("p","Este HTML no implementa autenticación. Publicarlo sin una restricción de acceso real no lo convierte en un recurso privado."),
+    el("p","No exporta tus respuestas escritas: solo progreso, puntuación y registro de resultados."));
+  const sound=button(state.sound?"🔊 Sonido activado":"🔇 Sonido desactivado",()=>{
+    state.sound=!state.sound;save();
+    sound.textContent=state.sound?"🔊 Sonido activado":"🔇 Sonido desactivado";beep(true);
+  });
+  modal.append(sound,el("p"),
+    button("💾 Exportar partida",()=>{
+      save();download("rootquest-partida.json",JSON.stringify(state,null,2));
+    }),document.createTextNode(" "));
+  const file=document.createElement("input");file.type="file";file.accept=".json,application/json";
+  file.className="hidden";
+  file.onchange=async()=>{
+    const f=file.files[0];if(!f)return;
+    try{
+      if(f.size>1000000)throw Error("Archivo demasiado grande.");
+      const imported=validateSave(JSON.parse(await f.text()));
+      if(!confirm("¿Reemplazar el progreso actual por esta partida?"))return;
+      state=imported;currentRoom=state.room;active=null;run=null;save();closeModal();showMap();toast("Partida importada.");
+    }catch(e){toast("Importación rechazada: "+e.message)}
+    file.value="";
+  };
+  modal.append(button("📂 Importar partida",()=>file.click()),file,el("p"),
+    button("📋 Exportar matriz de cobertura",()=>{
+      const lines=[
+        "# ROOT QUEST — Cobertura",
+        "",
+        "52 objetivos; dos modalidades por objetivo.",
+        "La práctica abierta es autoevaluada.",
+        "",
+        ...DATA.flatMap(x=>[
+          "## "+x.id+" — "+x.title,
+          "Estado: "+titleStatus(x),
+          "Fuente: "+x.source,
+          "Reconocimiento: "+x.question,
+          "Aplicación: "+x.challenge,
+          "Laguna documental: "+(x.gap||"No señalada."),
+          ""
+        ])
+      ];
+      download("cobertura-rootquest.md",lines.join("\n"),"text/markdown");
+    }),el("p"),
+    button("🗑️ Reiniciar toda la partida",()=>{
+      if(!confirm("Borrarás vidas, XP, jefes y progreso de este navegador. ¿Continuar?"))return;
+      state=blank();active=null;run=null;save();closeModal();showMap();
+    },"danger"));
+  modal.append(el("h3","Accesibilidad"),
+    el("p","Puedes usar Tab y Enter. El juego respeta la preferencia del sistema de reducir movimiento. No hay cuenta atrás. Las respuestas y soluciones no dependen solo del color."));
+}
+$("#mapBtn").onclick=()=>confirmLeave(showMap);
+$("#auditBtn").onclick=showAudit;
+$("#notesBtn").onclick=showNotes;
+$("#settingsBtn").onclick=showSettings;
+modal.addEventListener("click",e=>{
+  if(e.target===modal){
+    const r=modal.getBoundingClientRect();
+    if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeModal();
+  }
+});
+showMap();
+</script>
+</body>
+</html>
